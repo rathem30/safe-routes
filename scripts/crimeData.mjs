@@ -45,10 +45,6 @@ export function decay(ageDays) {
     return 0.5 ** (Math.max(0, ageDays) / HALF_LIFE_DAYS);
 }
 
-export function insideBounds({ south, west, north, east }, lat, lon) {
-    return lat >= south && lat <= north && lon >= west && lon <= east;
-}
-
 /**
  * Converts scored incidents to [latitude, longitude, weight], decayed relative to now.
  * @param {{ lat: number, lon: number, occurred: Date, score: number }[]} incidents

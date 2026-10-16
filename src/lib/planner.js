@@ -47,6 +47,7 @@ export class Planner {
 
         const start = graph.nearestNode(from.lat, from.lon);
         const end = graph.nearestNode(to.lat, to.lon);
+        if(start === end) throw new PlanError("Start and destination are the same spot. Move one of them.");
         const safe = findRoute(graph, start, end, safety * SAFETY_WEIGHT_PER_STEP);
         const shortest = findRoute(graph, start, end, 0);
         if(!safe || !shortest) throw new PlanError("No walking route connects these points.");

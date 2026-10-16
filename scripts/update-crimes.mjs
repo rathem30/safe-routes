@@ -4,10 +4,11 @@
 import { readFile, writeFile } from "node:fs/promises";
 import process from "node:process";
 import { COVERAGE } from "../src/config.js";
+import { boundsContain } from "../src/lib/geo.js";
 import { fetchCpdIncidents } from "./sources/cpd.mjs";
 import { fetchOsuLog, geocodePlace } from "./sources/osu.mjs";
 import {
-    HALF_LIFE_DAYS, WINDOW_DAYS, countsOsuIncident, createTextScorer, insideBounds, mergeOsuLog, weighIncidents,
+    HALF_LIFE_DAYS, WINDOW_DAYS, countsOsuIncident, createTextScorer, mergeOsuLog, weighIncidents,
 } from "./crimeData.mjs";
 
 const root = new URL("../", import.meta.url);
@@ -69,7 +70,13 @@ const unknownPlaces = [...new Set(counted.map(incident => incident.location))]
 const aliases = new Map(await readTsv(OSU_ALIASES));
 for(const name of unknownPlaces) {
     const alias = aliases.get(name);
-    places.set(name, alias && places.get(alias) ? places.get(alias) : await geocodePlace(alias ?? name));
+    try {
+        places.set(name, alias && places.get(alias) ? places.get(alias) : await geocodePlace(alias ?? name));
+    }
+    catch(error) {
+        // Left out of the cache so it is retried tomorrow; one failed lookup must not block the CPD refresh
+        console.warn(`Could not geocode "${name}": ${error.message}`);
+    }
 }
 
 const scoreText = createTextScorer(new Map((await readTsv("scripts/data/category_severity.tsv")).map(([name, score]) => [name, Number(score)])));
@@ -81,7 +88,7 @@ for(const incident of counted) {
     osu.push({ lat: point[0], lon: point[1], occurred: new Date(incident.occurred), score });
 }
 
-const inCoverage = incident => insideBounds(COVERAGE, incident.lat, incident.lon);
+const inCoverage = incident => boundsContain(COVERAGE, incident);
 const crimes = weighIncidents([...cpd, ...osu].filter(inCoverage), now);
 
 const newest = list => list.reduce((latest, incident) => incident.occurred > latest ? incident.occurred : latest, new Date(0)).toISOString().slice(0, 10);

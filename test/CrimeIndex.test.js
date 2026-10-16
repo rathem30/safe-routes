@@ -30,9 +30,4 @@ describe("CrimeIndex", () => {
         expect(single.riskAt(40 + 50 / 111195, -83)).toBeCloseTo(0.5);
         expect(single.riskAt(40 + 150 / 111195, -83)).toBe(0);
     });
-
-    it("counts crimes inside a box", () => {
-        expect(index.countInside({ south: 0, west: -90, north: 90, east: 0 })).toBe(crimes.length);
-        expect(index.countInside({ south: 0, west: 0, north: 1, east: 1 })).toBe(0);
-    });
 });

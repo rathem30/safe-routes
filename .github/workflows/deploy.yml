@@ -50,6 +50,7 @@ jobs:
             echo "No data changes"
           else
             git commit -m "Update crime data"
+            git pull --rebase
             git push
           fi
 

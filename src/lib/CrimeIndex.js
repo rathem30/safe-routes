@@ -57,12 +57,4 @@ export class CrimeIndex {
         });
         return risk;
     }
-
-    countInside({ south, west, north, east }) {
-        let count = 0;
-        for(const [lat, lon] of this.crimes) {
-            if(lat >= south && lat <= north && lon >= west && lon <= east) count++;
-        }
-        return count;
-    }
 }

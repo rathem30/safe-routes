@@ -15,7 +15,7 @@ function isoTimestamp(date) {
  */
 export async function fetchCpdIncidents(bounds, since) {
     const incidents = [];
-    for(let offset = 0; ; offset += PAGE_SIZE) {
+    for(let offset = 0; ;) {
         const params = new URLSearchParams({
             where: `OccurredOn >= TIMESTAMP '${isoTimestamp(since)}'`,
             geometry: `${bounds.west},${bounds.south},${bounds.east},${bounds.north}`,
@@ -45,7 +45,9 @@ export async function fetchCpdIncidents(bounds, since) {
                 subject: attributes.GeneralSubject ?? "",
             });
         }
-        if(!data.exceededTransferLimit && data.features.length < PAGE_SIZE) break;
+        // The server may return fewer rows than asked for, so advance by what arrived
+        offset += data.features.length;
+        if(data.features.length === 0 || (!data.exceededTransferLimit && data.features.length < PAGE_SIZE)) break;
     }
     return incidents;
 }
