@@ -13,6 +13,7 @@ export default function SearchBox({ label, marker, place, placeholder, onSelect,
     const [results, setResults] = useState(null);
     const [status, setStatus] = useState("");
     const controller = useRef(null);
+    const justFocused = useRef(false);
 
     const value = editing ? query : place?.label ?? "";
 
@@ -59,9 +60,15 @@ export default function SearchBox({ label, marker, place, placeholder, onSelect,
                         setQuery(place?.label ?? "");
                         // Select the current place so typing replaces it
                         const input = event.currentTarget;
+                        justFocused.current = true;
                         requestAnimationFrame(() => input.select());
                     }}
-                    onBlur={() => { if(!results) setEditing(false); }}
+                    onMouseUp={event => {
+                        // The mouseup that ends a focusing click would otherwise drop the selection
+                        if(justFocused.current) event.preventDefault();
+                        justFocused.current = false;
+                    }}
+                    onBlur={() => { justFocused.current = false; if(!results) setEditing(false); }}
                     onChange={event => setQuery(event.target.value)}
                     onKeyDown={event => { if(event.key === "Escape") { setResults(null); setEditing(false); event.currentTarget.blur(); } }}
                 />

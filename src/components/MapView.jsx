@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
-import { LngLatBounds, Map, Marker, NavigationControl, setWorkerUrl } from "maplibre-gl";
+import { AttributionControl, LngLatBounds, Map, Marker, NavigationControl, setWorkerUrl } from "maplibre-gl";
 import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?url";
-import { CITY, COVERAGE, MAP_STYLE } from "../config.js";
+import { CITY, COVERAGE, MAP_STYLE, MAP_STYLE_DARK } from "../config.js";
 
 setWorkerUrl(workerUrl);
 
@@ -24,7 +24,7 @@ function coverageOutline() {
     return lineFeature([[west, south], [east, south], [east, north], [west, north], [west, south]]);
 }
 
-function addLayers(map) {
+function addLayers(map, dark) {
     map.addSource("coverage", { type: "geojson", data: coverageOutline() });
     map.addLayer({
         id: "coverage-line",
@@ -63,7 +63,7 @@ function addLayers(map) {
         type: "line",
         source: "shortest",
         layout: { "line-cap": "round", "line-join": "round" },
-        paint: { "line-color": "#5b6472", "line-width": 4, "line-dasharray": [1, 1.6], "line-opacity": 0.85 },
+        paint: { "line-color": dark ? "#9aa4b1" : "#5b6472", "line-width": 4, "line-dasharray": [1, 1.6], "line-opacity": 0.85 },
     });
 
     map.addSource("safe", { type: "geojson", data: EMPTY });
@@ -72,14 +72,14 @@ function addLayers(map) {
         type: "line",
         source: "safe",
         layout: { "line-cap": "round", "line-join": "round" },
-        paint: { "line-color": "#ffffff", "line-width": 9 },
+        paint: { "line-color": dark ? "#0d1117" : "#ffffff", "line-width": 9 },
     });
     map.addLayer({
         id: "safe-line",
         type: "line",
         source: "safe",
         layout: { "line-cap": "round", "line-join": "round" },
-        paint: { "line-color": "#0b8a6b", "line-width": 5.5 },
+        paint: { "line-color": dark ? "#1fa67f" : "#0b8a6b", "line-width": 5.5 },
     });
 }
 
@@ -95,13 +95,15 @@ async function loadCrimeHeatmap(map) {
 /**
  * MapLibre map showing the two routes, draggable start and end markers and an optional crime heatmap.
  */
-export default function MapView({ from, to, result, settled, showHeatmap, fitPadding, onMapClick, onMove }) {
+export default function MapView({ from, to, result, settled, showHeatmap, dark, fitPadding, onMapClick, onMove }) {
     const container = useRef(null);
     const map = useRef(null);
     const markers = useRef({});
     const loaded = useRef(false);
     const handlers = useRef({ onMapClick, onMove });
     const lastDragEnd = useRef(0);
+    const darkRef = useRef(dark);
+    const heatmapRequested = useRef(false);
 
     useEffect(() => {
         handlers.current = { onMapClick, onMove };
@@ -110,11 +112,13 @@ export default function MapView({ from, to, result, settled, showHeatmap, fitPad
     useEffect(() => {
         const instance = new Map({
             container: container.current,
-            style: MAP_STYLE,
+            style: dark ? MAP_STYLE_DARK : MAP_STYLE,
             center: CITY.center,
             zoom: CITY.zoom,
-            attributionControl: { compact: true },
+            attributionControl: false,
         });
+        // Top right, because the bottom sheet covers the bottom of the map on phones
+        instance.addControl(new AttributionControl({ compact: true }), "top-right");
         instance.addControl(new NavigationControl({ showCompass: false }), "bottom-right");
         instance.doubleClickZoom.disable();
         instance.on("click", event => {
@@ -123,8 +127,9 @@ export default function MapView({ from, to, result, settled, showHeatmap, fitPad
             if(onMarker || performance.now() - lastDragEnd.current < 300) return;
             handlers.current.onMapClick({ lat: event.lngLat.lat, lon: event.lngLat.lng });
         });
-        instance.on("load", () => {
-            addLayers(instance);
+        // Fires for the first style and again after every theme switch, which drops our layers
+        instance.on("style.load", () => {
+            addLayers(instance, darkRef.current);
             loaded.current = true;
             instance.fire("layers-ready");
         });
@@ -136,7 +141,19 @@ export default function MapView({ from, to, result, settled, showHeatmap, fitPad
             loaded.current = false;
             markers.current = {};
         };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    // Declared before the effects that fill the layers, so they wait for the new style
+    useEffect(() => {
+        const instance = map.current;
+        if(darkRef.current === dark || !instance) return;
+        darkRef.current = dark;
+        loaded.current = false;
+        heatmapRequested.current = false;
+        // diff: false forces a full reload, so style.load fires and our layers are added back
+        instance.setStyle(dark ? MAP_STYLE_DARK : MAP_STYLE, { diff: false });
+    }, [dark]);
 
     // Runs a function once the map style and route layers exist
     function whenReady(callback) {
@@ -175,7 +192,7 @@ export default function MapView({ from, to, result, settled, showHeatmap, fitPad
             instance.getSource("safe").setData(result ? lineFeature(result.safe.coordinates) : EMPTY);
             instance.getSource("shortest").setData(result && !result.sameRoute ? lineFeature(result.shortest.coordinates) : EMPTY);
         });
-    }, [result]);
+    }, [result, dark]);
 
     // Frame the trip when an endpoint moves, not when the slider changes the route or a label arrives
     const fromKey = from && `${from.lat},${from.lon}`;
@@ -205,7 +222,6 @@ export default function MapView({ from, to, result, settled, showHeatmap, fitPad
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [result, settled]);
 
-    const heatmapRequested = useRef(false);
     useEffect(() => {
         whenReady(instance => {
             instance.setLayoutProperty("crime-heat", "visibility", showHeatmap ? "visible" : "none");
@@ -214,7 +230,7 @@ export default function MapView({ from, to, result, settled, showHeatmap, fitPad
                 loadCrimeHeatmap(instance).catch(() => { heatmapRequested.current = false; });
             }
         });
-    }, [showHeatmap]);
+    }, [showHeatmap, dark]);
 
     return <div ref={container} className="map" />;
 }

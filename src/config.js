@@ -14,6 +14,7 @@ export const DEFAULT_SAFETY = 4;
 export const WALKING_METERS_PER_MINUTE = 80;
 
 export const MAP_STYLE = "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json";
+export const MAP_STYLE_DARK = "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json";
 
 // The crime data covers Columbus, OH
 export const CITY = {

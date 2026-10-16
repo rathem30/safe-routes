@@ -4,7 +4,7 @@ import SearchBox from "./components/SearchBox.jsx";
 import RouteSummary from "./components/RouteSummary.jsx";
 import useRoutePlanner from "./useRoutePlanner.js";
 import { describePoint } from "./lib/geocode.js";
-import { SwapIcon } from "./components/icons.jsx";
+import { MoonIcon, SunIcon, SwapIcon } from "./components/icons.jsx";
 import { CITY, DEFAULT_SAFETY } from "./config.js";
 
 const REPO_URL = "https://github.com/rathem30/safe-routes";
@@ -50,21 +50,52 @@ function useIsWide() {
     return wide;
 }
 
+const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+/** "light" or "dark": the saved choice from the switch, otherwise the system setting. */
+function useTheme() {
+    const [saved, setSaved] = useState(() => {
+        try { return localStorage.getItem("theme"); }
+        catch { return null; }
+    });
+    const [systemDark, setSystemDark] = useState(darkQuery.matches);
+    useEffect(() => {
+        const update = () => setSystemDark(darkQuery.matches);
+        darkQuery.addEventListener("change", update);
+        return () => darkQuery.removeEventListener("change", update);
+    }, []);
+    const theme = saved ?? (systemDark ? "dark" : "light");
+
+    // Mirrored on <html> for color-scheme and the map control icons; before this runs, CSS follows the system
+    useEffect(() => {
+        document.documentElement.dataset.theme = theme;
+    }, [theme]);
+
+    function toggle() {
+        const next = theme === "dark" ? "light" : "dark";
+        setSaved(next);
+        try { localStorage.setItem("theme", next); }
+        catch { /* private mode: the choice lasts until reload */ }
+    }
+    return [theme, toggle];
+}
+
 export default function App() {
     const [from, setFrom] = useState(null);
     const [to, setTo] = useState(null);
     const [safety, setSafety] = useState(DEFAULT_SAFETY);
     const [showHeatmap, setShowHeatmap] = useState(false);
+    const [theme, toggleTheme] = useTheme();
     const { result, error, loading } = useRoutePlanner(from, to, safety);
     const wide = useIsWide();
     const dataNote = useDataNote();
     const panel = useRef(null);
     const panelHeight = useHeight(panel);
 
-    // Leave room for the panel when framing a route: beside it on wide screens, above the sheet on phones
+    // Leave room for the panel when framing a route: beside it on wide screens, above the sheet on phones (and below the attribution)
     const fitPadding = wide
         ? { top: 60, bottom: 60, left: 420, right: 60 }
-        : { top: 40, bottom: Math.round(panelHeight) + 24, left: 30, right: 30 };
+        : { top: 64, bottom: Math.round(panelHeight) + 24, left: 30, right: 30 };
 
     // Sets a pin, then swaps the placeholder label for the street name once it is known
     function dropPin(kind, point) {
@@ -99,6 +130,7 @@ export default function App() {
                 result={result}
                 settled={!loading && !error}
                 showHeatmap={showHeatmap}
+                dark={theme === "dark"}
                 fitPadding={fitPadding}
                 onMapClick={handleMapClick}
                 onMove={dropPin}
@@ -107,6 +139,15 @@ export default function App() {
             <aside className="panel" aria-label="Route planner" ref={panel}>
                 <header className="panel-header">
                     <h1>Safe Routes</h1>
+                    <button
+                        type="button"
+                        className="icon-button theme-toggle"
+                        onClick={toggleTheme}
+                        aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+                        title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+                    >
+                        {theme === "dark" ? <SunIcon /> : <MoonIcon />}
+                    </button>
                     <p>Walking directions in {CITY.name} that steer around reported crime.</p>
                 </header>
 
