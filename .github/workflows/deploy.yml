@@ -21,6 +21,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      update: ${{ steps.update.outcome }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -72,3 +74,10 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v5
+
+      # The site still deploys with the old data, but a failed refresh should not pass silently
+      - name: Report failed data update
+        if: needs.check.outputs.update == 'failure'
+        run: |
+          echo "::error::Crime data update failed; the site is serving the previous data"
+          exit 1

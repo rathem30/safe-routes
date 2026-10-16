@@ -107,7 +107,7 @@ const sortedArchive = Object.fromEntries(Object.entries(archive).sort(([a], [b])
 await writeFile(path(OSU_ARCHIVE), `{\n${Object.entries(sortedArchive).map(([id, incident]) => `${JSON.stringify(id)}:${JSON.stringify(incident)}`).join(",\n")}\n}\n`);
 const placeRows = [...places].sort(([a], [b]) => a.localeCompare(b)).map(([name, point]) => [name, point?.[0] ?? "", point?.[1] ?? ""].join("\t"));
 await writeFile(path(OSU_PLACES), ["Location\tLatitude\tLongitude", ...placeRows].join("\n") + "\n");
-await writeFile(path(CRIMES), JSON.stringify({ updated: meta.updated, halfLifeDays: HALF_LIFE_DAYS, crimes }));
+await writeFile(path(CRIMES), JSON.stringify({ crimes }));
 await writeFile(path(META), JSON.stringify(meta, null, 2) + "\n");
 
 const osuAdded = Object.keys(archive).filter(id => !knownCases.has(id)).length;
