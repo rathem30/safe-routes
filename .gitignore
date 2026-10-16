@@ -1,0 +1,9 @@
+node_modules
+dist
+*.log
+.DS_Store
+.vscode
+.idea
+
+# Raw police exports contain personal data. Never commit them.
+data/raw/

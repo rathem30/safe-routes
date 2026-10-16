@@ -1,0 +1,31 @@
+{
+  "name": "safe-routes",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Walking directions in Columbus, OH that steer around streets with recent reported crime.",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "lint": "eslint .",
+    "build:crimes": "node scripts/build-crimes.mjs"
+  },
+  "dependencies": {
+    "maplibre-gl": "^6.14.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@vitejs/plugin-react": "^6.1.2",
+    "eslint": "^10.12.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.7",
+    "globals": "^17.13.0",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.5"
+  }
+}
