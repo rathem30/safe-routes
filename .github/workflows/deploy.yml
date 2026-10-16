@@ -4,13 +4,23 @@ on:
   push:
     branches: [main]
   pull_request:
+  # Refresh crime data every day at 6 a.m. Eastern
+  schedule:
+    - cron: "0 10 * * *"
+  workflow_dispatch:
 
 permissions:
   contents: read
 
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   check:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -18,16 +28,38 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+
+      # A failed fetch keeps the previous data, so the site still deploys
+      - name: Update crime data
+        id: update
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        continue-on-error: true
+        run: npm run update:crimes
+
       - run: npm run lint
       - run: npm test
       - run: npm run build
+
+      - name: Commit updated data
+        if: steps.update.outcome == 'success'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/crimes.json public/crimes-meta.json data/osu-incidents.json scripts/data/osu_locations.tsv
+          if git diff --cached --quiet; then
+            echo "No data changes"
+          else
+            git commit -m "Update crime data"
+            git push
+          fi
+
       - uses: actions/upload-pages-artifact@v5
-        if: github.event_name == 'push'
+        if: github.event_name != 'pull_request'
         with:
           path: dist
 
   deploy:
-    if: github.event_name == 'push'
+    if: github.event_name != 'pull_request'
     needs: check
     runs-on: ubuntu-latest
     permissions:
