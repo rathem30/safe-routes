@@ -6,15 +6,15 @@ Walking directions in Columbus, OH that steer around streets with recent reporte
 
 ![Safer route detouring around a crime hotspot that the shortest route walks through](docs/screenshot.webp)
 
-Pick a start and destination by searching or clicking the map. The app draws the safer route next to the shortest one and tells you the trade-off, for example *"+1 min · 35% less crime exposure"*. Drag the slider from *Shortest* to *Safest* and the route updates instantly.
+Pick a start and destination by searching or clicking the map. The app draws the safer route next to the shortest one and tells you the trade-off, for example *"+1 min · 35% less crime exposure"*. Drag the slider from *Shortest* to *Safest*, or switch between *Day* and *Night*, and the route updates instantly.
 
 ## How it works
 
 The full explanation, with formulas, worked examples and tuning data, is in **[How risk is calculated](docs/how-risk-works.md)**. In short:
 
-1. **Live crime data.** A GitHub Action runs every morning. It pulls the last two years of incidents from the [City of Columbus police open data service](https://opendata.columbus.gov/) and the [Ohio State University Police daily crime log](https://dps.osu.edu/daily-crime-log), then redeploys the site. Each report becomes `[latitude, longitude, weight]`. The weight combines severity (homicide counts far more than shoplifting) and recency (it halves for each year of age). Non-crimes such as lost property and traffic accidents are left out.
+1. **Live crime data.** A GitHub Action runs every morning. It pulls the last two years of incidents from the [City of Columbus police open data service](https://opendata.columbus.gov/) and the [Ohio State University Police daily crime log](https://dps.osu.edu/daily-crime-log), then redeploys the site. Each report becomes `[latitude, longitude, weight, hour]`. The weight combines severity (homicide counts far more than shoplifting) and recency (it halves for each year of age). Non-crimes such as lost property and traffic accidents are left out.
 2. **Street network.** Every walkable street in central Columbus (about 200,000 nodes) is extracted from OpenStreetMap ahead of time and shipped as a 700 KB gzipped file. The app needs no routing server.
-3. **Risk per street.** In the browser, each street segment is sampled every 25 m. Every report within 100 m adds its weight, fading linearly with distance. A spatial grid keeps this to a few hundred milliseconds for the whole city.
+3. **Risk per street.** In the browser, each street segment is sampled every 25 m. Every report within 100 m adds its weight, fading linearly with distance. Streets are scored separately for day and night: reports from the other half of the day count at 30%. A spatial grid keeps this to about half a second for the whole city.
 4. **Routing.** A\* runs with edge cost
 
    ```

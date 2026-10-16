@@ -20,7 +20,7 @@ self.onmessage = async ({ data }) => {
         return;
     }
     try {
-        const result = await planner.plan(data.from, data.to, data.safety);
+        const result = await planner.plan(data.from, data.to, data.safety, data.period);
         self.postMessage({ id: data.id, result });
     }
     catch(error) {

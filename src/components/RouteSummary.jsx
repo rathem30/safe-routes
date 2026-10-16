@@ -21,7 +21,6 @@ export default function RouteSummary({ result, updating }) {
             <section className={`summary${updating ? " is-updating" : ""}`} aria-busy={updating}>
                 <p className="headline">{formatMinutes(safe.length)} · {formatDistance(safe.length)}</p>
                 <p className="note">The shortest route is already the lowest-risk option at this setting.</p>
-                <Stats route={safe} />
             </section>
         );
     }
@@ -42,13 +41,8 @@ export default function RouteSummary({ result, updating }) {
                 <tbody>
                     <tr><th scope="row">Walk</th><td>{formatMinutes(safe.length)}</td><td>{formatMinutes(shortest.length)}</td></tr>
                     <tr><th scope="row">Distance</th><td>{formatDistance(safe.length)}</td><td>{formatDistance(shortest.length)}</td></tr>
-                    <tr><th scope="row">Reports nearby</th><td>{safe.crimesNearby}</td><td>{shortest.crimesNearby}</td></tr>
                 </tbody>
             </table>
         </section>
     );
-}
-
-function Stats({ route }) {
-    return <p className="note">{route.crimesNearby} reported crimes within 100 m of the route.</p>;
 }

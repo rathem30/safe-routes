@@ -6,7 +6,7 @@ import { METERS_PER_DEGREE, distanceMeters } from "./geo.js";
  */
 export class CrimeIndex {
     /**
-     * @param {number[][]} crimes [latitude, longitude, weight] per report
+     * @param {number[][]} crimes [latitude, longitude, weight, hour] per report
      * @param {number} radius influence radius in meters
      */
     constructor(crimes, radius) {
@@ -49,11 +49,12 @@ export class CrimeIndex {
     /**
      * Severity-weighted crime density at a point. Each nearby report adds its weight,
      * fading linearly to zero at the edge of the radius.
+     * @param {(crime: number[]) => number} weightOf a report's weight, by default its stored one
      */
-    riskAt(lat, lon) {
+    riskAt(lat, lon, weightOf = crime => crime[2]) {
         let risk = 0;
         this.forEachNear(lat, lon, (i, distance) => {
-            risk += this.crimes[i][2] * (1 - distance / this.radius);
+            risk += weightOf(this.crimes[i]) * (1 - distance / this.radius);
         });
         return risk;
     }

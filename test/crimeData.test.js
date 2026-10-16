@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { countsOsuIncident, createTextScorer, decay, mergeOsuLog, parseOccurred, weighIncidents } from "../scripts/crimeData.mjs";
+import { countsOsuIncident, createTextScorer, decay, localHour, mergeOsuLog, parseOccurred, weighIncidents } from "../scripts/crimeData.mjs";
 import { parseCsv } from "../scripts/sources/osu.mjs";
 
 describe("parseOccurred", () => {
-    it("parses 12-hour timestamps", () => {
-        expect(parseOccurred("8/1/2023 12:55:00 AM")).toEqual(new Date(2023, 7, 1, 0, 55, 0));
-        expect(parseOccurred("8/1/2023 12:05:00 PM")).toEqual(new Date(2023, 7, 1, 12, 5, 0));
+    it("parses 12-hour timestamps into the UTC fields, whatever the machine's time zone", () => {
+        expect(parseOccurred("8/1/2023 12:55:00 AM")).toEqual(new Date(Date.UTC(2023, 7, 1, 0, 55, 0)));
+        expect(parseOccurred("8/1/2023 12:05:00 PM")).toEqual(new Date(Date.UTC(2023, 7, 1, 12, 5, 0)));
         expect(parseOccurred("")).toBeNull();
     });
 });
@@ -26,17 +26,25 @@ describe("createTextScorer", () => {
     });
 });
 
+describe("localHour", () => {
+    it("reads the Columbus hour and treats an exact midnight as unknown", () => {
+        expect(localHour(new Date(Date.UTC(2026, 0, 1, 21, 30)))).toBe(21);
+        expect(localHour(new Date(Date.UTC(2026, 0, 1, 0, 15)))).toBe(0);
+        expect(localHour(new Date(Date.UTC(2026, 0, 1, 0, 0, 0)))).toBe(-1);
+    });
+});
+
 describe("weighIncidents", () => {
-    const now = new Date(2026, 9, 15);
+    const now = new Date(Date.UTC(2026, 9, 15, 21));
 
     it("decays weight by age and drops faded reports", () => {
         const crimes = weighIncidents([
             { lat: 39.96, lon: -83, occurred: now, score: 20 },
-            { lat: 39.96, lon: -83, occurred: new Date(2025, 9, 15), score: 20 },
-            { lat: 39.96, lon: -83, occurred: new Date(2016, 0, 1), score: 70 },
+            { lat: 39.96, lon: -83, occurred: new Date(Date.UTC(2025, 9, 15, 21)), score: 20 },
+            { lat: 39.96, lon: -83, occurred: new Date(Date.UTC(2016, 0, 1)), score: 70 },
         ], now);
         expect(crimes).toHaveLength(2);
-        expect(crimes[0]).toEqual([39.96, -83, 0.64]);
+        expect(crimes[0]).toEqual([39.96, -83, 0.64, 21]);
         expect(crimes[1][2]).toBeCloseTo(0.32, 2);
     });
 
@@ -65,7 +73,7 @@ describe("OSU log", () => {
         expect(added).toBe(2);
         expect(Object.keys(archive).sort()).toEqual(["P1", "P2"]);
         expect(archive.P1.location).toBe("Ohio Union");
-        expect(new Date(archive.P2.occurred)).toEqual(new Date(2026, 8, 5, 1, 0, 0));
+        expect(new Date(archive.P2.occurred)).toEqual(new Date(Date.UTC(2026, 8, 5, 1, 0, 0)));
     });
 
     it("skips unfounded reports and emergency department reports", () => {

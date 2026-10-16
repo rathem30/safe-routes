@@ -18,7 +18,7 @@ function getWorker() {
  * Responses to superseded requests are ignored.
  * @returns {{ result: Object | null, error: string | null, loading: boolean }}
  */
-export default function useRoutePlanner(from, to, safety) {
+export default function useRoutePlanner(from, to, safety, period) {
     const [response, setResponse] = useState({ id: 0, result: null, error: null });
     const [requestedId, setRequestedId] = useState(0);
     const latestId = useRef(0);
@@ -39,10 +39,10 @@ export default function useRoutePlanner(from, to, safety) {
         const timeout = setTimeout(() => {
             const id = ++latestId.current;
             setRequestedId(id);
-            getWorker().postMessage({ type: "plan", id, from, to, safety, urls });
+            getWorker().postMessage({ type: "plan", id, from, to, safety, period, urls });
         }, 120);
         return () => clearTimeout(timeout);
-    }, [ready, from, to, safety]);
+    }, [ready, from, to, safety, period]);
 
     if(!ready) return { result: null, error: null, loading: false };
     const current = requestedId !== 0 && response.id === requestedId;

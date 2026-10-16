@@ -4,6 +4,7 @@ import SearchBox from "./components/SearchBox.jsx";
 import RouteSummary from "./components/RouteSummary.jsx";
 import useRoutePlanner from "./useRoutePlanner.js";
 import { describePoint } from "./lib/geocode.js";
+import { currentPeriod } from "./lib/timeOfDay.js";
 import { MoonIcon, SunIcon, SwapIcon } from "./components/icons.jsx";
 import { CITY, DEFAULT_SAFETY } from "./config.js";
 
@@ -84,9 +85,10 @@ export default function App() {
     const [from, setFrom] = useState(null);
     const [to, setTo] = useState(null);
     const [safety, setSafety] = useState(DEFAULT_SAFETY);
+    const [period, setPeriod] = useState(currentPeriod);
     const [showHeatmap, setShowHeatmap] = useState(false);
     const [theme, toggleTheme] = useTheme();
-    const { result, error, loading } = useRoutePlanner(from, to, safety);
+    const { result, error, loading } = useRoutePlanner(from, to, safety, period);
     const wide = useIsWide();
     const dataNote = useDataNote();
     const panel = useRef(null);
@@ -155,6 +157,18 @@ export default function App() {
                     <SearchBox label="From" marker="from" place={from} placeholder="Start address or place" onSelect={setFrom} onClear={() => setFrom(null)} />
                     <SearchBox label="To" marker="to" place={to} placeholder="Destination" onSelect={setTo} onClear={() => setTo(null)} />
                     <button type="button" className="swap" onClick={swap} disabled={!from && !to} aria-label="Swap start and destination" title="Swap start and destination"><SwapIcon /></button>
+                </div>
+
+                <div className="period">
+                    <span id="period-label" className="period-label">Time of day</span>
+                    <div className="segmented" role="radiogroup" aria-labelledby="period-label">
+                        {[["day", "Day"], ["night", "Night"]].map(([value, text]) => (
+                            <label key={value}>
+                                <input type="radio" name="period" value={value} checked={period === value} onChange={() => setPeriod(value)} />
+                                {text}
+                            </label>
+                        ))}
+                    </div>
                 </div>
 
                 <div className="safety">

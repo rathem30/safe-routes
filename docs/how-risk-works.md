@@ -101,7 +101,11 @@ recency = 0.5 ^ (age in days / 365)
 
 Patterns persist for a while, but a block that had trouble two years ago may not have it now. A half-life lets old reports fade gradually instead of falling off a cliff. Reports whose weight falls below 0.01 are dropped.
 
-Each report is published as just `[latitude, longitude, weight]`, rounded to 5 decimal places (about 1 m).
+### Hour of day
+
+Each report also keeps the hour it occurred, in Columbus time. Both sources store Columbus wall-clock time in their UTC fields, so the hour is read from there directly. Both also record a missing time as exactly midnight: in the October 2026 data, 00:00 shows up about twice as often as any other round hour. So an incident at exactly 00:00:00 gets hour **−1, unknown**, about 6% of reports.
+
+Each report is published as just `[latitude, longitude, weight, hour]`, with coordinates rounded to 5 decimal places (about 1 m).
 
 ---
 
@@ -137,7 +141,13 @@ The street network has about 226,000 segments, each running between two consecut
 
 Averaging means a segment's risk does not depend on how OpenStreetMap happened to split the street: the same 100 m of sidewalk scores the same whether it is one segment or four.
 
-All of this runs in the browser when the app loads, in about 0.3 seconds.
+### Day and night
+
+Danger depends on the hour, so every segment is scored twice: once for **day** (6 a.m. to 6 p.m., `DAY_START_HOUR` and `NIGHT_START_HOUR`) and once for **night**. A report counts fully in the period it occurred in and at **0.3** of its weight in the other (`OTHER_PERIOD_WEIGHT`). A street with daytime robberies is not harmless at night, but it should matter less than one with night-time robberies. Reports with an unknown hour count fully in both.
+
+The app starts on the period it currently is in Columbus, and the *Time of day* switch changes it. Both scorings are ready after loading, so switching only reruns the router.
+
+All of this runs in the browser when the app loads, in about 0.6 seconds.
 
 ---
 
@@ -184,8 +194,9 @@ At λ = 0, many routes can be exactly equally short. So that the comparison rout
 For every request, the router runs twice from the same start and end points: once with your λ and once for the shortest route. Both routes are scored the same way:
 
 - **Crime exposure** = Σ length × ln(1 + risk) over the route's segments. This is the risk part of the cost, without λ, so it measures exactly what the router is trying to avoid. *"62% less crime exposure"* means the safer route's exposure is 38% of the shortest route's.
-- **Reports nearby** = the number of distinct reports within 100 m of any point along the route, sampled every 25 m. It is easier to grasp than exposure, though it ignores severity and recency.
-- **Walk time** assumes 80 m per minute (about 4.8 km/h).
+- **Distance and walk time** include the short walk from each pin to the nearest street, drawn as a dotted line. Walk time assumes 80 m per minute (about 4.8 km/h).
+
+An earlier version also showed a count of reports near each route. It was dropped: the count ignores severity, recency and time of day, so it could disagree with the exposure figure (*"22% less exposure"* next to *414 vs 417 reports*).
 
 When both routes come out identical, the app says so instead of claiming an improvement.
 
@@ -221,6 +232,8 @@ Exposure falls quickly at first and then levels off: above λ ≈ 2 the router m
 | Sample spacing | 25 m | `src/config.js` |
 | λ per slider step | 0.3 | `src/config.js` |
 | Default slider position | 4 (λ = 1.2) | `src/config.js` |
+| Day hours | 6:00–18:00 | `src/config.js` |
+| Weight of reports from the other period | 0.3 | `src/config.js` |
 | Walking pace | 80 m/min | `src/config.js` |
 
 ---
@@ -231,7 +244,7 @@ Read the routes with these in mind:
 
 - **Reported crime is not the same as danger.** Reports concentrate where police patrol most and where businesses report every incident. Routing around reports can mean routing around lower-income neighborhoods and communities of color, which raises fairness concerns of its own. Treat the result as one input, not a safety rating.
 - **Locations are approximate.** CPD publishes block-level points, and OSU incidents are placed at the building they name. A report inside a building counts as risk on the streets around it.
-- **Time of day is ignored.** A street with daytime thefts counts the same at 2 a.m., and lighting and foot traffic are not considered.
+- **Time of day is coarse.** Reports are split only into day and night at fixed hours, which does not follow sunset through the year, and lighting and foot traffic are not considered.
 - **Severity scores are judgment calls.** They are a reasonable ordering, not a measured truth, and they are easy to change in the TSV files.
 - **The data lags.** CPD typically runs a few days behind, and OSU about a day.
 - **Some OSU incidents are left out.** Intersections and vague place names cannot always be located; these can be fixed by hand in `scripts/data/osu_locations.tsv`.

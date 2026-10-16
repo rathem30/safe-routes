@@ -101,8 +101,11 @@ export class StreetGraph {
      * Measures average crime density along every edge by sampling points along it.
      * @param {import("./CrimeIndex.js").CrimeIndex} crimeIndex
      * @param {number} spacing meters between samples
+     * @param {(crime: number[]) => number} weightOf a report's weight
+     * @returns {Float64Array} risk per edge
      */
-    applyRisk(crimeIndex, spacing) {
+    measureRisk(crimeIndex, spacing, weightOf) {
+        const result = new Float64Array(this.edgeCount);
         for(let edge = 0; edge < this.edgeCount; edge++) {
             const a = this.edgeA[edge];
             const b = this.edgeB[edge];
@@ -113,10 +116,12 @@ export class StreetGraph {
                 risk += crimeIndex.riskAt(
                     this.lat[a] + (this.lat[b] - this.lat[a]) * t,
                     this.lon[a] + (this.lon[b] - this.lon[a]) * t,
+                    weightOf,
                 );
             }
-            this.risk[edge] = risk / samples;
+            result[edge] = risk / samples;
         }
+        return result;
     }
 }
 

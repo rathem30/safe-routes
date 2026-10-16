@@ -57,6 +57,16 @@ function addLayers(map, dark) {
         },
     });
 
+    // Walk from each pin to the street where the route starts or ends
+    map.addSource("connectors", { type: "geojson", data: EMPTY });
+    map.addLayer({
+        id: "connector-line",
+        type: "line",
+        source: "connectors",
+        layout: { "line-cap": "round" },
+        paint: { "line-color": dark ? "#9aa4b1" : "#5b6472", "line-width": 2.5, "line-dasharray": [0.1, 2] },
+    });
+
     map.addSource("shortest", { type: "geojson", data: EMPTY });
     map.addLayer({
         id: "shortest-line",
@@ -191,6 +201,9 @@ export default function MapView({ from, to, result, settled, showHeatmap, dark, 
         whenReady(instance => {
             instance.getSource("safe").setData(result ? lineFeature(result.safe.coordinates) : EMPTY);
             instance.getSource("shortest").setData(result && !result.sameRoute ? lineFeature(result.shortest.coordinates) : EMPTY);
+            instance.getSource("connectors").setData(result
+                ? { type: "Feature", properties: {}, geometry: { type: "MultiLineString", coordinates: result.connectors } }
+                : EMPTY);
         });
     }, [result, dark]);
 

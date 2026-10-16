@@ -10,6 +10,12 @@ export const RISK_SAMPLE_SPACING_METERS = 25;
 export const SAFETY_WEIGHT_PER_STEP = 0.3;
 export const DEFAULT_SAFETY = 4;
 
+// Night runs from 6 p.m. to 6 a.m., Columbus time
+export const DAY_START_HOUR = 6;
+export const NIGHT_START_HOUR = 18;
+// Reports from the other half of the day still count this much: a street with daytime robberies is not harmless at night
+export const OTHER_PERIOD_WEIGHT = 0.3;
+
 // Average walking pace, about 4.8 km/h
 export const WALKING_METERS_PER_MINUTE = 80;
 

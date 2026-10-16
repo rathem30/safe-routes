@@ -9,13 +9,16 @@ export const MIN_WEIGHT = 0.01;
 
 const DAY_MS = 86400000;
 
-/** Parses "8/1/2023 12:55:00 AM" as a local date, or returns null. */
+/**
+ * Parses "8/1/2023 12:55:00 AM", or returns null. The Columbus wall-clock time is stored in the
+ * UTC fields, the same convention the CPD service uses, so the result never depends on the machine's time zone.
+ */
 export function parseOccurred(value) {
     const match = /^(\d+)\/(\d+)\/(\d+) (\d+):(\d+):(\d+) (AM|PM)$/.exec(value?.trim() ?? "");
     if(!match) return null;
     const [, month, day, year, hour, minute, second, meridiem] = match;
     const hours = (Number(hour) % 12) + (meridiem === "PM" ? 12 : 0);
-    return new Date(Number(year), Number(month) - 1, Number(day), hours, Number(minute), Number(second));
+    return new Date(Date.UTC(Number(year), Number(month) - 1, Number(day), hours, Number(minute), Number(second)));
 }
 
 /**
@@ -46,7 +49,16 @@ export function decay(ageDays) {
 }
 
 /**
- * Converts scored incidents to [latitude, longitude, weight], decayed relative to now.
+ * Hour of day in Columbus, or -1 when unknown. Both sources keep Columbus wall-clock time in UTC fields,
+ * and both record a missing time as exactly midnight, about twice as often as any other round hour.
+ */
+export function localHour(date) {
+    const hour = date.getUTCHours();
+    return hour === 0 && date.getUTCMinutes() === 0 && date.getUTCSeconds() === 0 ? -1 : hour;
+}
+
+/**
+ * Converts scored incidents to [latitude, longitude, weight, hour], decayed relative to now.
  * @param {{ lat: number, lon: number, occurred: Date, score: number }[]} incidents
  * @param {Date} now
  * @returns {number[][]}
@@ -56,7 +68,7 @@ export function weighIncidents(incidents, now) {
     for(const { lat, lon, occurred, score } of incidents) {
         const weight = severity(score) * decay((now - occurred) / DAY_MS);
         if(weight < MIN_WEIGHT) continue;
-        crimes.push([+lat.toFixed(5), +lon.toFixed(5), +weight.toFixed(3)]);
+        crimes.push([+lat.toFixed(5), +lon.toFixed(5), +weight.toFixed(3), localHour(occurred)]);
     }
     return crimes;
 }

@@ -64,42 +64,19 @@ export function findRoute(graph, start, end, safety) {
 }
 
 /**
- * @typedef {Object} RouteStats
- * @property {number} length meters
- * @property {number} exposure sum of length * ln(1 + risk), the risk term the router minimizes
- * @property {number} crimesNearby distinct reports within the crime radius of the route
- */
-
-/**
  * @param {import("./graph.js").StreetGraph} graph
  * @param {{ nodes: number[], edges: number[] }} route
- * @param {import("./CrimeIndex.js").CrimeIndex} crimeIndex
- * @param {number} spacing meters between samples when looking for nearby reports
- * @returns {RouteStats}
+ * @returns {{ length: number, exposure: number }} length in meters; exposure is the sum of
+ *   length * ln(1 + risk), the risk term the router minimizes
  */
-export function routeStats(graph, route, crimeIndex, spacing) {
+export function routeStats(graph, route) {
     let length = 0;
     let exposure = 0;
-    const nearby = new Set();
-
-    route.edges.forEach((edge, i) => {
+    for(const edge of route.edges) {
         length += graph.length[edge];
         exposure += graph.length[edge] * Math.log1p(graph.risk[edge]);
-
-        const a = route.nodes[i];
-        const b = route.nodes[i + 1];
-        const samples = Math.max(1, Math.ceil(graph.length[edge] / spacing));
-        for(let s = 0; s <= samples; s++) {
-            const t = s / samples;
-            crimeIndex.forEachNear(
-                graph.lat[a] + (graph.lat[b] - graph.lat[a]) * t,
-                graph.lon[a] + (graph.lon[b] - graph.lon[a]) * t,
-                index => nearby.add(index),
-            );
-        }
-    });
-
-    return { length, exposure, crimesNearby: nearby.size };
+    }
+    return { length, exposure };
 }
 
 /** Route as [longitude, latitude] pairs for GeoJSON. */
