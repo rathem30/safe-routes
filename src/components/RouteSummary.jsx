@@ -12,13 +12,13 @@ function formatMinutes(meters) {
     return `${minutes(meters)} min`;
 }
 
-/** Compares the safer route with the shortest one. */
-export default function RouteSummary({ result }) {
+/** Compares the safer route with the shortest one. While updating, the previous numbers stay in place, dimmed. */
+export default function RouteSummary({ result, updating }) {
     const { safe, shortest, sameRoute } = result;
 
     if(sameRoute) {
         return (
-            <section className="summary">
+            <section className={`summary${updating ? " is-updating" : ""}`} aria-busy={updating}>
                 <p className="headline">{formatMinutes(safe.length)} · {formatDistance(safe.length)}</p>
                 <p className="note">The shortest route is already the lowest-risk option at this setting.</p>
                 <Stats route={safe} />
@@ -30,7 +30,7 @@ export default function RouteSummary({ result }) {
     const reduction = shortest.exposure > 0 ? Math.round((1 - safe.exposure / shortest.exposure) * 100) : 0;
 
     return (
-        <section className="summary">
+        <section className={`summary${updating ? " is-updating" : ""}`} aria-busy={updating}>
             <p className="headline">
                 {extraMinutes > 0 ? `+${extraMinutes} min` : "About the same time"}
                 <span className="headline-accent"> · {reduction}% less crime exposure</span>

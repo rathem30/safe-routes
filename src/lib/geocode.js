@@ -29,3 +29,17 @@ export async function searchPlaces(query, signal) {
         lon: Number(result.lon),
     }));
 }
+
+/**
+ * Short description of the street at a point, such as "1739 North High Street".
+ * @returns {Promise<string | null>}
+ */
+export async function describePoint(lat, lon) {
+    const params = new URLSearchParams({ lat: String(lat), lon: String(lon), format: "jsonv2", zoom: "18" });
+    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?${params}`);
+    if(!response.ok) return null;
+    const { name, address } = await response.json();
+    if(!address) return null;
+    const street = [address.house_number, address.road ?? address.pedestrian ?? address.footway].filter(Boolean).join(" ");
+    return name || street || null;
+}

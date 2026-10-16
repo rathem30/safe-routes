@@ -1,5 +1,6 @@
 import { useId, useRef, useState } from "react";
 import { searchPlaces } from "../lib/geocode.js";
+import { CloseIcon } from "./icons.jsx";
 
 /**
  * Address input. Searches on Enter (Nominatim does not allow autocomplete)
@@ -65,7 +66,7 @@ export default function SearchBox({ label, marker, place, placeholder, onSelect,
                     onKeyDown={event => { if(event.key === "Escape") { setResults(null); setEditing(false); event.currentTarget.blur(); } }}
                 />
                 {place && !editing && (
-                    <button type="button" className="icon-button" onClick={onClear} aria-label={`Clear ${label.toLowerCase()}`}>×</button>
+                    <button type="button" className="icon-button" onClick={onClear} aria-label={`Clear ${label.toLowerCase()}`}><CloseIcon /></button>
                 )}
             </div>
             {status && <p className="search-status" role="status">{status}</p>}

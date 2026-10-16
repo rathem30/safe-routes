@@ -1,14 +1,41 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MapView from "./components/MapView.jsx";
 import SearchBox from "./components/SearchBox.jsx";
 import RouteSummary from "./components/RouteSummary.jsx";
 import useRoutePlanner from "./useRoutePlanner.js";
+import { describePoint } from "./lib/geocode.js";
+import { SwapIcon } from "./components/icons.jsx";
 import { CITY, DEFAULT_SAFETY } from "./config.js";
 
 const REPO_URL = "https://github.com/rathem30/safe-routes";
 
 function pinnedPlace(point) {
-    return { ...point, label: `Dropped pin (${point.lat.toFixed(4)}, ${point.lon.toFixed(4)})` };
+    return { ...point, label: "Dropped pin" };
+}
+
+/** Height of an element, kept current as it resizes. */
+function useHeight(ref) {
+    const [height, setHeight] = useState(0);
+    useEffect(() => {
+        const observer = new ResizeObserver(([entry]) => setHeight(entry.borderBoxSize[0].blockSize));
+        observer.observe(ref.current);
+        return () => observer.disconnect();
+    }, [ref]);
+    return height;
+}
+
+const DATE_FORMAT = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" });
+
+/** Describes where the crime data comes from and how fresh it is. */
+function useDataNote() {
+    const [note, setNote] = useState(null);
+    useEffect(() => {
+        fetch(`${import.meta.env.BASE_URL}crimes-meta.json`)
+            .then(response => response.json())
+            .then(meta => setNote(`Columbus Police and Ohio State Police reports from the last two years, updated ${DATE_FORMAT.format(new Date(meta.updated))}.`))
+            .catch(() => setNote("Columbus Police and Ohio State Police reports."));
+    }, []);
+    return note;
 }
 
 function useIsWide() {
@@ -30,19 +57,29 @@ export default function App() {
     const [showHeatmap, setShowHeatmap] = useState(false);
     const { result, error, loading } = useRoutePlanner(from, to, safety);
     const wide = useIsWide();
+    const dataNote = useDataNote();
+    const panel = useRef(null);
+    const panelHeight = useHeight(panel);
 
-    // Leave room for the panel when framing a route
+    // Leave room for the panel when framing a route: beside it on wide screens, above the sheet on phones
     const fitPadding = wide
         ? { top: 60, bottom: 60, left: 420, right: 60 }
-        : { top: 40, bottom: 320, left: 30, right: 30 };
+        : { top: 40, bottom: Math.round(panelHeight) + 24, left: 30, right: 30 };
 
-    function handleMapClick(point) {
-        if(!from) setFrom(pinnedPlace(point));
-        else setTo(pinnedPlace(point));
+    // Sets a pin, then swaps the placeholder label for the street name once it is known
+    function dropPin(kind, point) {
+        const set = kind === "from" ? setFrom : setTo;
+        set(pinnedPlace(point));
+        describePoint(point.lat, point.lon)
+            .then(label => {
+                if(!label) return;
+                set(current => current?.lat === point.lat && current?.lon === point.lon ? { ...current, label } : current);
+            })
+            .catch(() => {});
     }
 
-    function handleMove(kind, point) {
-        (kind === "from" ? setFrom : setTo)(pinnedPlace(point));
+    function handleMapClick(point) {
+        dropPin(from ? "to" : "from", point);
     }
 
     function swap() {
@@ -51,8 +88,8 @@ export default function App() {
     }
 
     const hint = !from
-        ? "Search for a place, or click the map to set your start."
-        : !to ? "Now pick a destination. Click the map or search." : null;
+        ? "Search for a place, or pick a point on the map to start."
+        : !to ? "Now choose a destination." : null;
 
     return (
         <div className="app">
@@ -60,13 +97,14 @@ export default function App() {
                 from={from}
                 to={to}
                 result={result}
+                settled={!loading && !error}
                 showHeatmap={showHeatmap}
                 fitPadding={fitPadding}
                 onMapClick={handleMapClick}
-                onMove={handleMove}
+                onMove={dropPin}
             />
 
-            <aside className="panel" aria-label="Route planner">
+            <aside className="panel" aria-label="Route planner" ref={panel}>
                 <header className="panel-header">
                     <h1>Safe Routes</h1>
                     <p>Walking directions in {CITY.name} that steer around reported crime.</p>
@@ -75,7 +113,7 @@ export default function App() {
                 <div className="places">
                     <SearchBox label="From" marker="from" place={from} placeholder="Start address or place" onSelect={setFrom} onClear={() => setFrom(null)} />
                     <SearchBox label="To" marker="to" place={to} placeholder="Destination" onSelect={setTo} onClear={() => setTo(null)} />
-                    <button type="button" className="swap" onClick={swap} disabled={!from && !to} aria-label="Swap start and destination" title="Swap">⇅</button>
+                    <button type="button" className="swap" onClick={swap} disabled={!from && !to} aria-label="Swap start and destination" title="Swap start and destination"><SwapIcon /></button>
                 </div>
 
                 <div className="safety">
@@ -96,8 +134,8 @@ export default function App() {
                 <div className="result" aria-live="polite">
                     {hint && <p className="note">{hint}</p>}
                     {error && <p className="error">{error}</p>}
-                    {!error && loading && <p className="note loading">Finding the safest walk…</p>}
-                    {!error && !loading && result && <RouteSummary result={result} />}
+                    {!error && loading && !result && <p className="note loading">Finding the safest walk…</p>}
+                    {!error && result && <RouteSummary result={result} updating={loading} />}
                 </div>
 
                 <footer className="panel-footer">
@@ -110,8 +148,8 @@ export default function App() {
                         Show crime heatmap
                     </label>
                     <p className="fineprint">
-                        Based on Columbus Police reports through Nov 2023. Reports reflect where crime was reported, not
-                        how safe a street is. Use your own judgement. <a href={REPO_URL} target="_blank" rel="noreferrer">How it works</a>
+                        {dataNote} Reports show where crime was reported, not how safe a street is. Use your own
+                        judgement. <a href={REPO_URL} target="_blank" rel="noreferrer">How it works</a>
                     </p>
                 </footer>
             </aside>

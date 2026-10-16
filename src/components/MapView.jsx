@@ -43,8 +43,9 @@ function addLayers(map) {
         paint: {
             "heatmap-weight": ["get", "w"],
             "heatmap-radius": ["interpolate", ["exponential", 2], ["zoom"], 11, 4, 14, 18, 17, 90],
-            "heatmap-intensity": ["interpolate", ["linear"], ["zoom"], 11, 0.6, 16, 1.4],
-            "heatmap-opacity": 0.55,
+            // Tuned for about 65,000 reports; denser data needs lower intensity to stay readable
+            "heatmap-intensity": ["interpolate", ["linear"], ["zoom"], 11, 0.15, 16, 0.4],
+            "heatmap-opacity": 0.5,
             "heatmap-color": [
                 "interpolate", ["linear"], ["heatmap-density"],
                 0, "rgba(253, 219, 199, 0)",
@@ -94,12 +95,13 @@ async function loadCrimeHeatmap(map) {
 /**
  * MapLibre map showing the two routes, draggable start and end markers and an optional crime heatmap.
  */
-export default function MapView({ from, to, result, showHeatmap, fitPadding, onMapClick, onMove }) {
+export default function MapView({ from, to, result, settled, showHeatmap, fitPadding, onMapClick, onMove }) {
     const container = useRef(null);
     const map = useRef(null);
     const markers = useRef({});
     const loaded = useRef(false);
     const handlers = useRef({ onMapClick, onMove });
+    const lastDragEnd = useRef(0);
 
     useEffect(() => {
         handlers.current = { onMapClick, onMove };
@@ -115,7 +117,12 @@ export default function MapView({ from, to, result, showHeatmap, fitPadding, onM
         });
         instance.addControl(new NavigationControl({ showCompass: false }), "bottom-right");
         instance.doubleClickZoom.disable();
-        instance.on("click", event => handlers.current.onMapClick({ lat: event.lngLat.lat, lon: event.lngLat.lng }));
+        instance.on("click", event => {
+            // Releasing a dragged pin also fires a map click, which would move the other pin
+            const onMarker = event.originalEvent.target.closest?.(".maplibregl-marker");
+            if(onMarker || performance.now() - lastDragEnd.current < 300) return;
+            handlers.current.onMapClick({ lat: event.lngLat.lat, lon: event.lngLat.lng });
+        });
         instance.on("load", () => {
             addLayers(instance);
             loaded.current = true;
@@ -155,6 +162,7 @@ export default function MapView({ from, to, result, showHeatmap, fitPadding, onM
                 .setLngLat([place.lon, place.lat])
                 .addTo(map.current);
             marker.on("dragend", () => {
+                lastDragEnd.current = performance.now();
                 const { lat, lng } = marker.getLngLat();
                 handlers.current.onMove(kind, { lat, lon: lng });
             });
@@ -169,18 +177,33 @@ export default function MapView({ from, to, result, showHeatmap, fitPadding, onM
         });
     }, [result]);
 
-    // Frame the trip whenever the endpoints change, not when the slider changes the route
+    // Frame the trip when an endpoint moves, not when the slider changes the route or a label arrives
+    const fromKey = from && `${from.lat},${from.lon}`;
+    const toKey = to && `${to.lat},${to.lon}`;
     useEffect(() => {
-        if(!from || !to) return;
+        if(!from) return;
+        if(!to) {
+            map.current?.easeTo({ center: [from.lon, from.lat], duration: 500 });
+            return;
+        }
         const bounds = new LngLatBounds([from.lon, from.lat], [from.lon, from.lat]).extend([to.lon, to.lat]);
         map.current?.fitBounds(bounds, { padding: fitPadding, maxZoom: 16, duration: 700 });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [from, to]);
+    }, [fromKey, toKey]);
 
+    // Once the route for new endpoints arrives, widen the frame to include any detour
+    const framedTrip = useRef(null);
     useEffect(() => {
-        if(!from || to) return;
-        map.current?.easeTo({ center: [from.lon, from.lat], duration: 500 });
-    }, [from, to]);
+        const trip = `${fromKey}|${toKey}`;
+        if(!settled || !result || framedTrip.current === trip) return;
+        framedTrip.current = trip;
+        const bounds = new LngLatBounds(result.safe.coordinates[0], result.safe.coordinates[0]);
+        for(const point of [...result.safe.coordinates, ...result.shortest.coordinates]) bounds.extend(point);
+        // The pins can sit a little off the street the route starts on
+        for(const place of [from, to]) bounds.extend([place.lon, place.lat]);
+        map.current?.fitBounds(bounds, { padding: fitPadding, maxZoom: 16, duration: 600 });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [result, settled]);
 
     const heatmapRequested = useRef(false);
     useEffect(() => {
