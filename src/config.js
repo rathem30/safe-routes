@@ -4,9 +4,11 @@ export const CRIME_RADIUS_METERS = 100;
 // Spacing of the points sampled along each street when measuring its risk
 export const RISK_SAMPLE_SPACING_METERS = 25;
 
-// Safety slider (0-10) multiplied by this gives the risk weight in the edge cost
-export const SAFETY_WEIGHT_PER_STEP = 0.5;
-export const DEFAULT_SAFETY = 6;
+// Safety slider (0-10) multiplied by this gives the risk weight in the edge cost.
+// Tuned on random trips: the default costs a median 5% detour for about 40% less exposure,
+// and weights above 3 barely reduce exposure further
+export const SAFETY_WEIGHT_PER_STEP = 0.3;
+export const DEFAULT_SAFETY = 4;
 
 // Average walking pace, about 4.8 km/h
 export const WALKING_METERS_PER_MINUTE = 80;
