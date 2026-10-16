@@ -1,15 +1,17 @@
-// Pure helpers for turning a raw Columbus Police export into routing weights.
+// Pure helpers that turn incident records into routing weights.
 
-// A report's weight halves for every year it is older than the newest report
+// A report's weight halves for every year of age
 export const HALF_LIFE_DAYS = 365;
+// Reports older than this are not fetched; their weight would be at most a quarter of a new one
+export const WINDOW_DAYS = 730;
 // Reports whose weight decays below this are dropped
 export const MIN_WEIGHT = 0.01;
-// Franklin County, OH. Some reports are geocoded to the wrong city or country
-export const AREA = { south: 39.75, west: -83.3, north: 40.2, east: -82.7 };
+
+const DAY_MS = 86400000;
 
 /** Parses "8/1/2023 12:55:00 AM" as a local date, or returns null. */
 export function parseOccurred(value) {
-    const match = /^(\d+)\/(\d+)\/(\d+) (\d+):(\d+):(\d+) (AM|PM)$/.exec(value ?? "");
+    const match = /^(\d+)\/(\d+)\/(\d+) (\d+):(\d+):(\d+) (AM|PM)$/.exec(value?.trim() ?? "");
     if(!match) return null;
     const [, month, day, year, hour, minute, second, meridiem] = match;
     const hours = (Number(hour) % 12) + (meridiem === "PM" ? 12 : 0);
@@ -17,100 +19,84 @@ export function parseOccurred(value) {
 }
 
 /**
- * Parses a Python-style list string: "['291102.12 - Robbery', '...']".
- * Descriptions can contain commas, so this matches quoted items instead of splitting.
+ * Scores offense text by the most severe category name it contains.
+ * @param {Map<string, number>} categoryScores lower is more severe (Homicide 5 ... Fraud 70)
+ * @returns {(text: string) => number | null}
  */
-export function parseList(value) {
-    return [...(value ?? "").matchAll(/'((?:[^'\\]|\\.)*)'|"((?:[^"\\]|\\.)*)"/g)].map(m => m[1] ?? m[2]);
-}
-
-/** [latitude, longitude] from either Latitude/Longitude fields or a "lon, lat" Coordinates string. */
-export function parseCoordinates(row) {
-    if(row.Latitude != null && row.Longitude != null) {
-        return [Number(row.Latitude), Number(row.Longitude)];
-    }
-    const [lon, lat] = String(row.Coordinates ?? "").split(",").map(Number);
-    return [lat, lon];
-}
-
-/**
- * @param {Map<string, string>} offenseToCategory
- * @param {Map<string, number>} categoryScores lower is more severe (Murder 5 ... Embezzlement 70)
- * @returns {(offense: string) => number | null}
- */
-export function createOffenseScorer(offenseToCategory, categoryScores) {
+export function createTextScorer(categoryScores) {
     // Longest names first so "Motor Vehicle Theft" wins over "Theft"
-    const categoryNames = [...categoryScores.keys()].sort((a, b) => b.length - a.length);
-    return offense => {
-        const category = offenseToCategory.get(offense);
-        if(category && categoryScores.has(category)) return categoryScores.get(category);
-
-        // Fall back to finding a category name inside "<code> - <name> _ <detail>"
-        const name = offense.split(" - ").slice(1).join(" - ").split(" _ ")[0];
-        const match = categoryNames.find(c => name.includes(c));
-        return match ? categoryScores.get(match) : null;
+    const names = [...categoryScores.keys()].sort((a, b) => b.length - a.length);
+    return text => {
+        let best = null;
+        for(const part of text.split(";")) {
+            const match = names.find(name => part.includes(name));
+            if(match && (best === null || categoryScores.get(match) < best)) best = categoryScores.get(match);
+        }
+        return best;
     };
 }
 
-/** Maps a category score of 5..70 to 0.90..0.09, squared to widen the gap between violent and petty crime. */
+/** Maps a score of 5..70 to 0.90..0.09, squared to widen the gap between violent and petty crime. */
 export function severity(score) {
     return ((100 - score) / 100) ** 2;
 }
 
 export function decay(ageDays) {
-    return 0.5 ** (ageDays / HALF_LIFE_DAYS);
+    return 0.5 ** (Math.max(0, ageDays) / HALF_LIFE_DAYS);
 }
 
-function isoDate(date) {
-    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+export function insideBounds({ south, west, north, east }, lat, lon) {
+    return lat >= south && lat <= north && lon >= west && lon <= east;
 }
 
 /**
- * Reduces raw export rows to the minimum the router needs. No names, addresses or narratives survive.
- * @returns {{ output: { referenceDate: string, halfLifeDays: number, crimes: number[][] }, reportCount: number, unscored: number, outside: number }}
+ * Converts scored incidents to [latitude, longitude, weight], decayed relative to now.
+ * @param {{ lat: number, lon: number, occurred: Date, score: number }[]} incidents
+ * @param {Date} now
+ * @returns {number[][]}
  */
-export function buildCrimes(rows, scoreOffense) {
-    // The export has one row per offense or victim, so merge rows by report number
-    const reports = new Map();
-    let unscored = 0;
-    let outside = 0;
-    for(const row of rows) {
-        const occurred = parseOccurred(row.Occurred);
-        const [lat, lon] = parseCoordinates(row);
-        if(!occurred || !Number.isFinite(lat) || !Number.isFinite(lon)) continue;
-        if(lat < AREA.south || lat > AREA.north || lon < AREA.west || lon > AREA.east) {
-            outside++;
-            continue;
-        }
-
-        const scores = parseList(row["Offense Descriptions"]).map(scoreOffense).filter(s => s != null);
-        if(scores.length === 0) {
-            unscored++;
-            continue;
-        }
-
-        const key = row["Report Number"] ?? row.URL;
-        const score = Math.min(...scores);
-        const existing = reports.get(key);
-        if(!existing || score < existing.score) {
-            reports.set(key, { lat, lon, occurred, score });
-        }
-    }
-
-    let newest = -Infinity;
-    for(const report of reports.values()) newest = Math.max(newest, report.occurred.getTime());
-
+export function weighIncidents(incidents, now) {
     const crimes = [];
-    for(const { lat, lon, occurred, score } of reports.values()) {
-        const weight = severity(score) * decay((newest - occurred.getTime()) / 86400000);
+    for(const { lat, lon, occurred, score } of incidents) {
+        const weight = severity(score) * decay((now - occurred) / DAY_MS);
         if(weight < MIN_WEIGHT) continue;
         crimes.push([+lat.toFixed(5), +lon.toFixed(5), +weight.toFixed(3)]);
     }
+    return crimes;
+}
 
-    return {
-        output: { referenceDate: reports.size ? isoDate(new Date(newest)) : null, halfLifeDays: HALF_LIFE_DAYS, crimes },
-        reportCount: reports.size,
-        unscored,
-        outside,
-    };
+/**
+ * Normalizes OSU crime log rows and merges them into the archive, keyed by case number.
+ * The public log only covers 60 days, so the archive is what keeps older incidents.
+ * @param {Object<string, Object>} archive case number -> incident, updated in place
+ * @param {Object[]} rows CSV rows
+ * @param {Date} cutoff incidents that occurred before this are dropped
+ * @returns {number} number of new cases
+ */
+export function mergeOsuLog(archive, rows, cutoff) {
+    let added = 0;
+    for(const row of rows) {
+        const id = row["Case Number"]?.trim();
+        const occurred = parseOccurred(row["Date/Time Occurrence Start"]) ?? parseOccurred(row["Date/Time Reported"]);
+        if(!id || !occurred) continue;
+        if(!archive[id]) added++;
+        archive[id] = {
+            occurred: occurred.toISOString(),
+            location: row["General Location"].replace(/\s+/g, " ").trim(),
+            offenses: row.Offenses.trim(),
+            disposition: row.Disposition.trim(),
+        };
+    }
+    for(const [id, incident] of Object.entries(archive)) {
+        if(new Date(incident.occurred) < cutoff) delete archive[id];
+    }
+    return added;
+}
+
+/**
+ * Whether an OSU incident should count toward street risk.
+ * Unfounded reports did not happen, and emergency department reports are where victims were treated.
+ */
+export function countsOsuIncident(incident) {
+    return !/unfounded/i.test(incident.disposition) && !/emergency department/i.test(incident.location);
 }

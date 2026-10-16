@@ -11,7 +11,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "lint": "eslint .",
-    "build:crimes": "node scripts/build-crimes.mjs"
+    "update:crimes": "node scripts/update-crimes.mjs"
   },
   "dependencies": {
     "maplibre-gl": "^6.14.0",
