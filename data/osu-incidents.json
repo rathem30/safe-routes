@@ -614,5 +614,11 @@
 "P2026-03005":{"occurred":"2026-10-20T09:41:00.000Z","location":"University Square North","offenses":"Open Liquor Container _ public place","disposition":"Open - Arrest"},
 "P2026-03006":{"occurred":"2026-10-20T10:01:00.000Z","location":"Barnes and Noble College","offenses":"Robbery _ Use or threaten the immediate use of force against another.","disposition":"Closed"},
 "P2026-03007":{"occurred":"2026-10-16T12:00:00.000Z","location":"Maintenance Building","offenses":"Theft","disposition":"Closed"},
-"P2026-03008":{"occurred":"2026-10-14T12:08:00.000Z","location":"Morrill Tower - Bike Racks","offenses":"Theft _ without consent","disposition":"Closed"}
+"P2026-03008":{"occurred":"2026-10-14T12:08:00.000Z","location":"Morrill Tower - Bike Racks","offenses":"Theft _ without consent","disposition":"Closed"},
+"P2026-03010":{"occurred":"2026-10-18T00:54:00.000Z","location":"Smith-Steeb Hall","offenses":"Theft of mail.","disposition":"Open - Pending Investigation"},
+"P2026-03011":{"occurred":"2026-10-20T17:06:00.000Z","location":"Torres House","offenses":"Theft _ without consent","disposition":"Closed"},
+"P2026-03012":{"occurred":"2026-10-20T18:27:00.000Z","location":"Canfield Hall","offenses":"Telecommunications Harassment","disposition":"Open - Pending Investigation"},
+"P2026-03013":{"occurred":"2026-10-11T08:00:00.000Z","location":"Unknown Location","offenses":"CSA Report: Hazing","disposition":"CSA Victim Declined to Make Report"},
+"P2026-03016":{"occurred":"2026-10-21T09:45:00.000Z","location":"Ohio Union","offenses":"Criminal Trespass (CCC)","disposition":"Open - Arrest"},
+"P2026-03020":{"occurred":"2026-10-16T14:20:00.000Z","location":"James Cancer Hospital","offenses":"Gross Sexual Imposition _ suspect knowledge of substantial impairment","disposition":"Open - Pending Investigation"}
 }
