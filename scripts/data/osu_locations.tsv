@@ -1,5 +1,6 @@
 Location	Latitude	Longitude
 11th Ave Garage	39.9951438	-83.0130193
+11th Ave Parking Garage	39.9951438	-83.0130193
 12th Ave Garage	39.9966473	-83.0174298
 1359 N High St	39.9899676	-83.006186
 1528 N. High Street	39.9936585	-83.0066883
@@ -59,6 +60,7 @@ Busch House Bike Racks	40.0046684	-83.0092844
 Busch House South Bike Rack	40.0046684	-83.0092844
 Campbell Hall Bike Rack	39.9977868	-83.0158255
 Canfield Hall	39.9959403	-83.0136754
+Canfield Hall bike racks	39.9959403	-83.0136754
 Carepoint East	39.9790928	-82.9628963
 Carmack Lot 1	40.0030035	-83.0402882
 Carmack Lot 2	40.0030035	-83.0402882
@@ -166,6 +168,7 @@ Lincoln Turf Fields
 Main Oval near Bricker Hall	39.9994828	-83.012759
 Maintenance Building	40.0022168	-83.0175482
 Martha Morehouse Medical Plaza		
+McCampbell Hall	39.9936314	-83.0205427
 McPherson Chemical Laboratory	40.0025395	-83.0123778
 McPherson Laboratory	40.0025395	-83.0123778
 Medical Center - University Hospital Tower	39.9948571	-83.0198739
@@ -325,6 +328,7 @@ UNKNOWN OFF CAMPUS
 Unknown residence hall		
 Unversity Hospital	39.9950008	-83.0210401
 Vet Med Center		
+W 11TH AVE	39.9955193	-83.0135131
 W Lane Ave / N High St	40.006134	-83.0103365
 W Lane Ave and Neil Ave		
 W Lane Ave/ N High St	40.006134	-83.0103365
