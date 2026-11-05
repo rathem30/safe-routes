@@ -69,6 +69,7 @@
 "CSA2026-03179":{"occurred":"2026-10-29T15:48:00.000Z","location":"Baker Hall - East","offenses":"Theft _ without consent","disposition":"Closed"},
 "CSA2026-03180":{"occurred":"2026-10-29T15:55:00.000Z","location":"StateHouse Highline","offenses":"CSA Report: Dating Violence","disposition":"Closed"},
 "CSA2026-03194":{"occurred":"2026-10-30T14:00:00.000Z","location":"Morrison Tower","offenses":"Theft _ without consent","disposition":"Closed"},
+"CSA2026-03202":{"occurred":"2026-10-30T16:00:00.000Z","location":"StateHouse Highline","offenses":"CSA Report: Dating Violence","disposition":"Closed"},
 "EXT2026-02106":{"occurred":"2025-04-25T00:00:00.000Z","location":"Alpha Chi Omega","offenses":"Burglary","disposition":"Closed"},
 "EXT2026-02107":{"occurred":"2026-08-18T14:34:00.000Z","location":"Alpha Chi Omega","offenses":"Burglary","disposition":"Closed"},
 "EXT2026-02108":{"occurred":"2025-01-01T00:00:00.000Z","location":"Phi Kappa Psi Chapter House","offenses":"Burglary","disposition":"Closed"},
@@ -679,7 +680,7 @@
 "P2026-03094":{"occurred":"2026-10-26T13:49:00.000Z","location":"University Hospital","offenses":"Criminal Trespass (CCC)","disposition":"Closed"},
 "P2026-03095":{"occurred":"2026-10-19T18:30:00.000Z","location":"Parking Garage - Lane Ave","offenses":"Theft _ without consent","disposition":"Unfounded"},
 "P2026-03096":{"occurred":"2026-10-20T21:00:00.000Z","location":"W 11TH AVE","offenses":"Criminal Damaging/Endangering _ knowingly any means; Theft _ without consent","disposition":"Closed"},
-"P2026-03098":{"occurred":"2026-10-26T18:53:00.000Z","location":"Barnes & Noble at OSU","offenses":"Receiving Stolen Property; Theft _ without consent; Illegal Use or Possession of Drug Paraphernalia","disposition":"Open - Arrest"},
+"P2026-03098":{"occurred":"2026-10-26T18:53:00.000Z","location":"Barnes & Noble at OSU","offenses":"Receiving Stolen Property; Illegal Use or Possession of Drug Paraphernalia; Theft _ without consent","disposition":"Open - Arrest"},
 "P2026-03099":{"occurred":"2026-10-26T19:01:00.000Z","location":"Barnes & Noble at OSU","offenses":"Illegal Use or Possession of Drug Paraphernalia; Criminal Trespass; Theft _ without consent","disposition":"Open - Arrest"},
 "P2026-03101":{"occurred":"2026-10-26T20:14:00.000Z","location":"University Square South","offenses":"Aggravated Menacing","disposition":"Closed"},
 "P2026-03102":{"occurred":"2026-10-26T20:36:00.000Z","location":"Ross Heart Hospital","offenses":"Sexual Imposition","disposition":"Open - Arrest"},
@@ -713,7 +714,7 @@
 "P2026-03144":{"occurred":"2026-10-30T02:31:00.000Z","location":"Maintenance Building","offenses":"Offenses Involving Underage Persons _ underage consume beer intoxicating liquor; Prohibitions; Disorderly Conduct (CCC) - Intox, risk of harm","disposition":"Closed"},
 "P2026-03145":{"occurred":"2026-10-30T02:53:00.000Z","location":"McCampbell Hall","offenses":"Prohibitions; Offenses Involving Underage Persons _ underage consume beer intoxicating liquor; Disorderly Conduct (CCC) - Intox, risk of harm","disposition":"Closed"},
 "P2026-03146":{"occurred":"2026-10-30T03:30:00.000Z","location":"Gateway Garage","offenses":"Having Physical Control of Vehicle While Under the Influence _ under the influence of alcohol, a drug of abuse, or a combination; Prohibitions; Disorderly Conduct (CCC) - Intox, risk of harm; Offenses Involving Underage Persons _ underage consume beer intoxicating liquor","disposition":"Open - Arrest"},
-"P2026-03148":{"occurred":"2026-10-30T02:13:00.000Z","location":"Gateway Garage","offenses":"Criminal Damaging/Endangering _ knowingly any means; Theft _ without consent","disposition":"Open - Pending Investigation"},
+"P2026-03148":{"occurred":"2026-10-30T02:13:00.000Z","location":"Gateway Garage","offenses":"Theft _ without consent; Criminal Damaging/Endangering _ knowingly any means","disposition":"Open - Pending Investigation"},
 "P2026-03149":{"occurred":"2026-10-29T20:00:00.000Z","location":"11th Ave Parking Garage","offenses":"Criminal Damaging/Endangering _ knowingly any means","disposition":"Open - Pending Investigation"},
 "P2026-03150":{"occurred":"2026-10-28T12:00:00.000Z","location":"University Hospital","offenses":"Theft _ without consent","disposition":"Closed"},
 "P2026-03152":{"occurred":"2026-10-30T22:51:00.000Z","location":"Bowen House","offenses":"Disorderly Conduct (CCC) - Intox, risk of harm; Offenses Involving Underage Persons _ underage consume beer intoxicating liquor","disposition":"Closed"},
@@ -744,5 +745,10 @@
 "P2026-03185":{"occurred":"2026-10-29T04:46:00.000Z","location":"Hamilton Hall bike rack","offenses":"Theft _ without consent","disposition":"Open - Pending Investigation"},
 "P2026-03188":{"occurred":"2026-11-03T07:40:00.000Z","location":"Prior Hall","offenses":"Theft _ without consent","disposition":"Open - Pending Investigation"},
 "P2026-03189":{"occurred":"2026-11-03T12:29:00.000Z","location":"Residence on 10th Ave.","offenses":"Theft _ without consent","disposition":"Closed"},
-"P2026-03193":{"occurred":"2026-11-03T13:05:00.000Z","location":"Drinko Hall","offenses":"Graffitism (CCC)","disposition":"Closed"}
+"P2026-03193":{"occurred":"2026-11-03T13:05:00.000Z","location":"Drinko Hall","offenses":"Graffitism (CCC)","disposition":"Closed"},
+"P2026-03195":{"occurred":"2026-10-28T09:00:00.000Z","location":"Ohio Stadium","offenses":"Criminal Damaging/Endangering _ knowingly any means","disposition":"Open - Arrest"},
+"P2026-03198":{"occurred":"2026-11-03T22:14:00.000Z","location":"Game Arena","offenses":"Criminal Damaging/Endangering _ knowingly any means; Disorderly Conduct (CCC) Engage in fighting","disposition":"Open - Pending Investigation"},
+"P2026-03199":{"occurred":"2026-11-03T23:00:00.000Z","location":"Off Campus Fraternity","offenses":"CSA Report: Hazing","disposition":"CSA Victim Declined to Make Report"},
+"P2026-03200":{"occurred":"2026-10-29T06:30:00.000Z","location":"Carmack Lot 3","offenses":"Telecommunications Harassment","disposition":"Open - Pending Investigation"},
+"P2026-03201":{"occurred":"2026-10-29T12:30:00.000Z","location":"Knowlton Hall","offenses":"Theft _ without consent","disposition":"Closed"}
 }
