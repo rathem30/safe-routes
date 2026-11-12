@@ -411,7 +411,7 @@
 "P2026-02644":{"occurred":"2026-09-22T17:11:00.000Z","location":"Dreese Laboratories Bicycle Rack","offenses":"Theft _ without consent","disposition":"Closed"},
 "P2026-02645":{"occurred":"2026-09-22T20:54:00.000Z","location":"Chiller Plant","offenses":"Criminal Trespass (CCC)","disposition":"Closed"},
 "P2026-02646":{"occurred":"2026-09-23T00:50:00.000Z","location":"18th Avenue Library","offenses":"Criminal Trespass (CCC)","disposition":"Closed"},
-"P2026-02648":{"occurred":"2026-08-13T12:00:00.000Z","location":"OSU East Hospital","offenses":"Rape _ substantially impair judgment","disposition":"Open - Pending Investigation"},
+"P2026-02648":{"occurred":"2026-08-13T12:00:00.000Z","location":"OSU East Hospital","offenses":"Rape _ substantially impair judgment","disposition":"Closed"},
 "P2026-02649":{"occurred":"2026-09-22T16:00:00.000Z","location":"Morrill Tower Northeast bike rack","offenses":"Theft _ without consent","disposition":"Closed"},
 "P2026-02654":{"occurred":"2026-09-23T11:00:00.000Z","location":"Morrill Tower","offenses":"Telecommunications Fraud","disposition":"Closed"},
 "P2026-02655":{"occurred":"2026-09-23T14:44:00.000Z","location":"East Hospital - Main","offenses":"Aggravated Menacing","disposition":"Closed"},
@@ -752,7 +752,7 @@
 "P2026-03189":{"occurred":"2026-11-03T12:29:00.000Z","location":"Residence on 10th Ave.","offenses":"Theft _ without consent","disposition":"Closed"},
 "P2026-03193":{"occurred":"2026-11-03T13:05:00.000Z","location":"Drinko Hall","offenses":"Graffitism (CCC)","disposition":"Closed"},
 "P2026-03195":{"occurred":"2026-10-28T09:00:00.000Z","location":"Ohio Stadium","offenses":"Criminal Damaging/Endangering _ knowingly any means","disposition":"Open - Arrest"},
-"P2026-03198":{"occurred":"2026-11-03T22:14:00.000Z","location":"Game Arena","offenses":"Criminal Damaging/Endangering _ knowingly any means; Disorderly Conduct (CCC) Engage in fighting","disposition":"Open - Pending Investigation"},
+"P2026-03198":{"occurred":"2026-11-03T22:14:00.000Z","location":"Game Arena","offenses":"Criminal Damaging/Endangering _ knowingly any means; Disorderly Conduct (CCC) Engage in fighting","disposition":"Closed"},
 "P2026-03199":{"occurred":"2026-11-03T23:00:00.000Z","location":"Off Campus Fraternity","offenses":"CSA Report: Hazing","disposition":"CSA Victim Declined to Make Report"},
 "P2026-03200":{"occurred":"2026-10-29T06:30:00.000Z","location":"Carmack Lot 3","offenses":"Menacing by Stalking _ knowingly cause to believe physical harm or cause mental distress; Illegal use of a tracking device or application; Criminal Mischief _ move, deface, tamper, etc. property of another","disposition":"Reported to Other Agency"},
 "P2026-03201":{"occurred":"2026-10-29T12:30:00.000Z","location":"Knowlton Hall","offenses":"Theft _ without consent","disposition":"Closed"},
@@ -776,7 +776,7 @@
 "P2026-03238":{"occurred":"2026-05-07T08:00:00.000Z","location":"James Outpatient Care","offenses":"Theft _ without consent","disposition":"Open - Pending Investigation"},
 "P2026-03242":{"occurred":"2026-11-07T04:06:00.000Z","location":"Houck House","offenses":"Offenses Involving Underage Persons _ underage consume beer intoxicating liquor; Prohibitions","disposition":"Closed"},
 "P2026-03244":{"occurred":"2026-11-07T14:15:00.000Z","location":"Gateway Garage","offenses":"Disorderly Conduct (CCC) Create an offensive condition","disposition":"Closed"},
-"P2026-03245":{"occurred":"2026-11-07T17:46:00.000Z","location":"Barnes & Noble at OSU","offenses":"Obstructing Official Business; Criminal Trespass (CCC)","disposition":"Closed"},
+"P2026-03245":{"occurred":"2026-11-07T17:46:00.000Z","location":"Barnes & Noble at OSU","offenses":"Falsification _ public official, mislead; Criminal Trespass (CCC)","disposition":"Closed"},
 "P2026-03248":{"occurred":"2026-11-07T20:32:00.000Z","location":"Gateway Complex","offenses":"Open Liquor Container _ operator or passenger of motor vehicle; Driving Wrong Way On One Way Street; Driving While Under the Influence of Alcohol/Drugs .08 of 1 gram or more but less than .17 of 1 gram by weight of alcohol per 210 liters of breath; Driving While Under the Influence of Alcohol and/or Drugs","disposition":"Open - Arrest"},
 "P2026-03252":{"occurred":"2026-11-08T05:52:00.000Z","location":"Emergency Department - OSU Main","offenses":"Public Indecency _ exposure; Criminal Trespass (CCC)","disposition":"Open - Arrest"},
 "P2026-03254":{"occurred":"2026-11-07T14:00:00.000Z","location":"The Ohio State University Wexner Medical Center","offenses":"Menacing","disposition":"Open - Pending Investigation"},
@@ -794,5 +794,9 @@
 "P2026-03275":{"occurred":"2026-11-10T02:24:00.000Z","location":"University Square Complex","offenses":"Criminal Trespass (CCC)","disposition":"Closed"},
 "P2026-03276":{"occurred":"2026-11-10T07:55:00.000Z","location":"Emergency Department - OSU Main","offenses":"Disorderly Conduct (CCC) Engage in fighting","disposition":"Closed"},
 "P2026-03280":{"occurred":"2026-11-10T12:22:00.000Z","location":"OSU East Hospital","offenses":"Inducing Panic _ commit offense w/ reckless disregard","disposition":"Closed"},
-"P2026-03282":{"occurred":"2026-11-10T13:20:00.000Z","location":"Buckeye Lots","offenses":"Theft _ without consent; Criminal Damaging/Endangering _ knowingly any means","disposition":"Open - Pending Investigation"}
+"P2026-03282":{"occurred":"2026-11-10T13:20:00.000Z","location":"Buckeye Lots","offenses":"Failure to Comply with Order or Signal of P.O. _ lawful order or direction; Theft _ without consent; Criminal Damaging/Endangering _ knowingly any means","disposition":"Open - Pending Investigation"},
+"P2026-03286":{"occurred":"2026-11-06T07:00:00.000Z","location":"University Hospital","offenses":"Criminal Damaging/Endangering _ knowingly any means","disposition":"Closed"},
+"P2026-03287":{"occurred":"2026-11-10T17:45:00.000Z","location":"Adevnture Recreation Center","offenses":"Theft _ without consent","disposition":"Unfounded"},
+"P2026-03288":{"occurred":"2026-11-10T06:20:00.000Z","location":"Residence on Tenth","offenses":"Theft of mail.","disposition":"Open - Pending Investigation"},
+"P2026-03289":{"occurred":"2026-11-10T22:58:00.000Z","location":"Cannon Dr and John H. Herrick Dr","offenses":"Disorderly Conduct (CCC) - Hindering movement","disposition":"Open - Arrest"}
 }
