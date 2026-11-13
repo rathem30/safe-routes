@@ -1,17 +1,17 @@
 {
-  "updated": "2026-11-12T17:56:40.484Z",
+  "updated": "2026-11-13T17:32:25.340Z",
   "halfLifeDays": 365,
   "windowDays": 730,
   "sources": {
     "cpd": {
       "name": "Columbus Division of Police",
-      "count": 63780,
-      "newest": "2026-11-09"
+      "count": 63772,
+      "newest": "2026-11-10"
     },
     "osu": {
       "name": "Ohio State University Police",
-      "count": 551,
-      "newest": "2026-11-10"
+      "count": 556,
+      "newest": "2026-11-12"
     }
   }
 }
