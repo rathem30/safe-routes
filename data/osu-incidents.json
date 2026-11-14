@@ -794,7 +794,7 @@
 "P2026-03275":{"occurred":"2026-11-10T02:24:00.000Z","location":"University Square Complex","offenses":"Criminal Trespass (CCC)","disposition":"Closed"},
 "P2026-03276":{"occurred":"2026-11-10T07:55:00.000Z","location":"Emergency Department - OSU Main","offenses":"Disorderly Conduct (CCC) Engage in fighting","disposition":"Closed"},
 "P2026-03280":{"occurred":"2026-11-10T12:22:00.000Z","location":"OSU East Hospital","offenses":"Inducing Panic _ commit offense w/ reckless disregard","disposition":"Closed"},
-"P2026-03282":{"occurred":"2026-11-10T13:20:00.000Z","location":"Buckeye Lots","offenses":"Failure to Comply with Order or Signal of P.O. _ lawful order or direction; Theft _ without consent; Criminal Damaging/Endangering _ knowingly any means","disposition":"Open - Pending Investigation"},
+"P2026-03282":{"occurred":"2026-11-10T13:20:00.000Z","location":"Buckeye Lots","offenses":"Theft _ without consent - 10 counts; Failure to Comply with Order or Signal of P.O. _ lawful order or direction; Criminal Damaging/Endangering _ knowingly any means - 20 counts","disposition":"Open - Pending Investigation"},
 "P2026-03286":{"occurred":"2026-11-06T07:00:00.000Z","location":"University Hospital","offenses":"Criminal Damaging/Endangering _ knowingly any means","disposition":"Closed"},
 "P2026-03287":{"occurred":"2026-11-10T17:45:00.000Z","location":"Adevnture Recreation Center","offenses":"Theft _ without consent","disposition":"Closed"},
 "P2026-03288":{"occurred":"2026-11-10T06:20:00.000Z","location":"Residence on Tenth","offenses":"Theft of mail.","disposition":"Open - Pending Investigation"},
@@ -805,7 +805,15 @@
 "P2026-03298":{"occurred":"2026-11-12T00:30:00.000Z","location":"Drinko Hall","offenses":"Theft _ without consent","disposition":"Closed"},
 "P2026-03300":{"occurred":"2026-11-08T09:30:00.000Z","location":"181 Taylor Ave. East Hospital - Tower","offenses":"Prohibitions Concerning Companion Animals; Cruelty to Animals _ torture","disposition":"Open - Pending Investigation"},
 "P2026-03302":{"occurred":"2026-11-12T07:50:00.000Z","location":"Emergency Department - OSU Main","offenses":"Assault _ knowingly harm victim","disposition":"Open - Pending Investigation"},
-"P2026-03303":{"occurred":"2026-11-12T13:30:00.000Z","location":"Page Hall","offenses":"Telecommunications Harassment _ anonymous, harassing, etc.","disposition":"Open - Pending Investigation"},
+"P2026-03303":{"occurred":"2026-11-07T10:33:00.000Z","location":"Page Hall","offenses":"Telecommunications Harassment _ anonymous, harassing, etc.","disposition":"Open - Pending Investigation"},
 "P2026-03304":{"occurred":"2026-11-12T13:47:00.000Z","location":"Heffner Wetlands","offenses":"Criminal Trespass","disposition":"Closed"},
-"P2026-03305":{"occurred":"2026-11-09T17:30:00.000Z","location":"Smith Laboratory","offenses":"Theft _ without consent","disposition":"Closed"}
+"P2026-03305":{"occurred":"2026-11-09T17:30:00.000Z","location":"Smith Laboratory","offenses":"Theft _ without consent","disposition":"Closed"},
+"P2026-03309":{"occurred":"2026-11-12T17:31:00.000Z","location":"East Hospital - Main","offenses":"Criminal Trespass (CCC); Disorderly Conduct _ offensive gesture or noise","disposition":"Closed"},
+"P2026-03311":{"occurred":"2026-11-12T21:13:00.000Z","location":"Ohio State University Hospital","offenses":"Criminal Trespass (CCC); Disorderly Conduct (CCC) Engage in fighting","disposition":"Open - Arrest"},
+"P2026-03314":{"occurred":"2026-11-13T01:52:00.000Z","location":"Smith-Steeb","offenses":"Disorderly Conduct (CCC) Unreasonable; Criminal Trespass; Prohibitions","disposition":"Closed"},
+"P2026-03315":{"occurred":"2026-11-13T03:25:00.000Z","location":"Smith-Steeb Hall","offenses":"Driving While Under the Influence of Alcohol and/or Drugs","disposition":"Open - Arrest"},
+"P2026-03317":{"occurred":"2026-11-13T06:33:00.000Z","location":"Davis Heart and Lung Research Institute","offenses":"Criminal Trespass _ restricted area","disposition":"Closed"},
+"P2026-03318":{"occurred":"2026-11-13T06:57:00.000Z","location":"OSU Wexner Emergency Department","offenses":"Criminal Trespass (CCC)","disposition":"Closed"},
+"P2026-03320":{"occurred":"2026-10-19T12:00:00.000Z","location":"Lane Ave Parking Garage","offenses":"Criminal Damaging/Endangering","disposition":"Closed"},
+"P2026-03322":{"occurred":"2026-11-10T23:55:00.000Z","location":"Park-Stradley Hall","offenses":"Theft of mail.","disposition":"Open - Pending Investigation"}
 }
