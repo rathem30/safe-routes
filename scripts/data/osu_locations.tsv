@@ -13,6 +13,7 @@ Location	Latitude	Longitude
 18th Avenue Library	40.0015988	-83.0133326
 2012 Kenny Rd.	40.0006582	-83.0344615
 315 South at Lane Ave Exit		
+41 W 11TH AVE	39.99547	-83.0101071
 57 W 11TH AVE	39.9952666	-83.0090551
 9th Ave East Garage	39.9929121	-83.0155821
 9th Ave West Garage	39.9926153	-83.0166769
@@ -27,6 +28,7 @@ Amweg Aly / E 11th Ave
 Annie & John Glenn Ave/ College Rd		
 Archer House	40.0053365	-83.01412
 Arps Garage	40.0026829	-83.0099565
+Arps Hall	40.0019522	-83.0096785
 Baker East	39.9964545	-83.0102323
 Baker Hall - East	39.9964545	-83.0102323
 Baker Hall - West	39.9964545	-83.0102323
@@ -49,6 +51,7 @@ Blackburn House	40.0042929	-83.0125896
 Blackwell Inn	40.0048598	-83.0166096
 Blankenship hall	40.0023046	-83.0336897
 Blankenship Hall	40.0023046	-83.0336897
+Blankinship Hall		
 Bowen House	40.0053713	-83.0094319
 Bowen House BIKE RACK	40.0053713	-83.0094319
 Bradley Hall	39.9965292	-83.0129184
@@ -84,6 +87,7 @@ College Rd and Annie & John Glenn Ave
 College Rd/ W 11th Ave		
 College Rd/ W. 18th Ave		
 COLUMBUS CAMPUS	40.0067432	-83.0093694
+COLUMBUS CAMPUS Classroom		
 Curl Market	40.0041495	-83.0110037
 Dave's Hot Chicken	39.9995412	-83.0077732
 Davis Heart and Lung Bike Rack		
@@ -114,6 +118,7 @@ Faculty Club	39.9982336	-83.012724
 Fawcett Center	40.0107885	-83.0210438
 First Watch	39.994235	-83.0071455
 Fisher College of Business	40.0046877	-83.01574
+Fisher Hall	40.0048316	-83.015983
 Fontana Laboratories	40.0033168	-83.0121696
 Fred Beekman park	40.0045922	-83.037526
 Fred Beekman Park	40.0045922	-83.037526
@@ -140,6 +145,7 @@ Heffner Wetlands
 Heminger Hall	39.9936127	-83.0148171
 High St at E. 11th Ave		
 High St. and Euclid Ave		
+Honey Boy Pizza		
 Hopkins Hall	40.0007728	-83.0117391
 Hospital Security Office		
 Houck House	40.0051356	-83.0109904
@@ -189,6 +195,7 @@ Midway on High	39.9976767	-83.0073634
 Morrill Commons		
 Morrill Tower	40.0000688	-83.0218799
 Morrill Tower - Bike Racks	40.0000688	-83.0218799
+Morrill Tower Delivery Rack		
 Morrill Tower Northeast bike rack		
 Morrill TowerMorrill Tower	40.0000688	-83.0218799
 Morrison Tower	39.9959162	-83.012907
@@ -226,8 +233,10 @@ Ohio State Unitversity
 Ohio State University Hospital	39.9948571	-83.0198739
 Ohio Union	39.9976645	-83.0085472
 OHIO UNION	39.9976645	-83.0085472
+Ohio Union - Sloopy's Diner	39.9976645	-83.0085472
 Ohio Union BIKE RACK	39.9976645	-83.0085472
 Ohio Union Bike Racks	39.9976645	-83.0085472
+Ohio Union Loop		
 Ohio Union North Garage	39.9988997	-83.0089367
 Ohio Union South Garage	39.998365	-83.0088487
 Ohio Union West Plaza		
@@ -357,6 +366,7 @@ Unknown residence hall
 Unversity Hospital	39.9950008	-83.0210401
 Vet Med Center		
 W 11TH AVE	39.9955193	-83.0135131
+W 12th Ave. / N. High St	39.9969449	-83.0085552
 W Lane Ave / N High St	40.006134	-83.0103365
 W Lane Ave and Neil Ave		
 W Lane Ave/ N High St	40.006134	-83.0103365
