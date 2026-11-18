@@ -18,6 +18,7 @@ Location	Latitude	Longitude
 9th Ave East Garage	39.9929121	-83.0155821
 9th Ave West Garage	39.9926153	-83.0166769
 9th Ave. East Garage	39.9929121	-83.0155821
+9th Avenue Garage	39.9926153	-83.0166769
 Adevnture Recreation Center		
 Adventure Recreation Center	40.0025654	-83.0317211
 Agricultural Administration	40.0054711	-83.0270647
@@ -99,11 +100,13 @@ Dreese Lab	40.0021646	-83.0158474
 Dreese Laboratories Bicycle Rack	40.0021646	-83.0158474
 Drinko Hall	39.9960814	-83.0082084
 Drinko Hall bike rack	39.9960814	-83.0082084
+E 15th & PEARL	39.9994411	-83.007111
 E 16th Ave/Pearl Alley		
 East Hospital	39.970727	-82.963156
 East Hospital - Main	39.970727	-82.963156
 East Hospital - Talbot	39.970727	-82.963156
 East Hospital - Tower	39.970727	-82.963156
+East Hospital - Tower (0397)	39.970727	-82.963156
 East Hospital Tower	39.970727	-82.963156
 Emergency Dapartment - OSU Main		
 Emergency Department - OSU East		
@@ -327,6 +330,7 @@ StateHouse Highline	39.9928626	-83.0064021
 Statehouse Lane	40.0065371	-83.0134966
 StateHouse Lane	40.0065371	-83.0134966
 StateHouse Norwich	40.0076465	-83.0161524
+Statehouse on High		
 StateHouse on High		
 Student Academic Services Building	40.0059877	-83.0161488
 Sullivant Hall West Bicycle Rack	39.9994772	-83.0087418
