@@ -2,6 +2,7 @@ Location	Latitude	Longitude
 1165 KINNEAR RD	39.9971957	-83.0395232
 11th Ave Garage	39.9951438	-83.0130193
 11th Ave Parking Garage	39.9951438	-83.0130193
+11th Avenue Parking Garage	39.9951438	-83.0130193
 12th Ave Garage	39.9966473	-83.0174298
 1359 N High St	39.9899676	-83.006186
 1528 N. High Street	39.9936585	-83.0066883
@@ -88,6 +89,7 @@ Chittenden Ave/ N High	39.9963101	-83.0072432
 Clinical Research and Innovation Facility		
 Coffey Rd Recreation Complex	40.001852	-83.0260274
 College Rd and Annie & John Glenn Ave		
+College Rd and W Woodruff Ave		
 College Rd/ W 11th Ave		
 College Rd/ W. 18th Ave		
 COLUMBUS CAMPUS	40.0067432	-83.0093694
@@ -161,6 +163,7 @@ Houston House Bike Rack	40.0058189	-83.0117317
 Hunter Ave and Amweg ALY		
 HUNTER AVE and W 9TH AVE		
 Independence Hall	40.0003505	-83.0157671
+Intersection of College Rd and W Woodruff Ave		
 James Cancer Hospital	39.9949945	-83.0196645
 James Outpatient Care	40.0016472	-83.0354948
 Jameson Crane Sports Medicine Institute	40.0177939	-83.0314219
@@ -253,6 +256,7 @@ Ohio Union West Plaza
 Optometry clinic	39.9953768	-83.0140897
 OSU Campus	39.993948	-83.006049
 OSU COLUMBUS CAMPUS	39.993948	-83.006049
+OSU East	39.9790928	-82.9628963
 OSU East Bistro Cafe		
 OSU East Cafe		
 OSU East ED		
@@ -332,6 +336,7 @@ Smith-Steeb Hall	39.9957977	-83.0095073
 Smith-Steeb Hall BIKE RACK	39.9957977	-83.0095073
 Snag	40.0006996	-83.0079898
 South side Orton Hall		
+St John Arena	40.0054147	-83.0191345
 St John Arena Lot		
 Stadium Lot East		
 Statehouse at Lane		
@@ -380,6 +385,7 @@ Unknown residence hall
 Unversity Hospital	39.9950008	-83.0210401
 Vet Med Center		
 W 11TH AVE	39.9955193	-83.0135131
+W 12th Ave / Cannon Dr		
 W 12th Ave. / N. High St	39.9969449	-83.0085552
 W Lane Ave / N High St	40.006134	-83.0103365
 W Lane Ave and Neil Ave		
