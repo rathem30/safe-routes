@@ -916,5 +916,11 @@
 "P2026-03464":{"occurred":"2026-11-24T17:35:00.000Z","location":"Ty Tucker Tennis Center","offenses":"Criminal Trespass _ land premises of another","disposition":"Closed"},
 "P2026-03465":{"occurred":"2026-11-21T10:20:00.000Z","location":"Recreation and Physical Activity Center","offenses":"Theft _ without consent","disposition":"Closed"},
 "P2026-03466":{"occurred":"2026-11-21T15:00:00.000Z","location":"University Hospital - Rhodes Hall","offenses":"Theft","disposition":"Open - Pending Investigation"},
-"P2026-03467":{"occurred":"2026-11-24T21:28:00.000Z","location":"Thompson Library","offenses":"Inducing Panic _ circulating report/warning","disposition":"Closed"}
+"P2026-03467":{"occurred":"2026-11-24T21:28:00.000Z","location":"Thompson Library","offenses":"Inducing Panic _ circulating report/warning","disposition":"Closed"},
+"P2026-03468":{"occurred":"2026-11-25T16:34:00.000Z","location":"Emergency Department","offenses":"Possession of Drugs _ schedule I or II substance","disposition":"Closed"},
+"P2026-03470":{"occurred":"2026-11-25T22:38:00.000Z","location":"Ohio Union South Garage","offenses":"Offenses Involving Underage Persons _ underage consume beer intoxicating liquor - 2 counts","disposition":"Open - Arrest"},
+"P2026-03471":{"occurred":"2026-11-25T23:55:00.000Z","location":"Ohio Union","offenses":"Offenses Involving Underage Persons _ underage consume beer intoxicating liquor; Disorderly Conduct (CCC) - Intox, risk of harm; Obstructing Official Business","disposition":"Open - Arrest"},
+"P2026-03473":{"occurred":"2026-11-26T02:10:00.000Z","location":"Sullivant Hall","offenses":"Obstructing Official Business; Disorderly Conduct (CCC) Create an offensive condition; Prohibitions - 2 counts","disposition":"Open - Arrest"},
+"P2026-03474":{"occurred":"2026-11-26T02:32:00.000Z","location":"1728 N HIGH ST, COLUMBUS, OH 43201 (Midway On High)","offenses":"Disorderly Conduct (CCC) Engage in fighting; Prohibitions","disposition":"Closed"},
+"P2026-03476":{"occurred":"2026-11-26T02:06:00.000Z","location":"Ohio Union South Garage","offenses":"Criminal Damaging/Endangering _ knowingly any means; Theft _ without consent","disposition":"Open - Pending Investigation"}
 }
